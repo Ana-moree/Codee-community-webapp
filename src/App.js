@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Search, Bell, User, Home, BarChart3, Trophy, Hash, MessageCircle, Heart, Share2, Bookmark, HelpCircle, CheckCircle } from 'lucide-react';
+import { Search, Bell, User, Home, BarChart3, Trophy, Hash, MessageCircle, Heart, Share2, Bookmark, HelpCircle, CheckCircle, Settings, LogOut, Moon, Sun } from 'lucide-react';
 import './App.css';
 
 function App() {
@@ -8,6 +8,8 @@ function App() {
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [notifications] = useState(5);
   const [selectedSurveyOption, setSelectedSurveyOption] = useState(null);
+  const [showProfileMenu, setShowProfileMenu] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(true);
 
   const sidebarItems = [
     { id: 'home', label: 'Home', icon: Home },
@@ -115,18 +117,22 @@ function App() {
   ];
 
   const filteredPosts = posts.filter(post => {
-    const matchesCategory = selectedCategory === 'all' || post.category?.toLowerCase().includes(selectedCategory.toLowerCase());
     const matchesSearch = searchQuery === '' || 
-      post.content?.toLowerCase().includes(searchQuery.toLowerCase());
-    return matchesCategory && matchesSearch;
+      post.content?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      post.surveyQuestion?.toLowerCase().includes(searchQuery.toLowerCase());
+    return matchesSearch;
   }).sort((a, b) => {
     if (a.isPinned && !b.isPinned) return -1;
     if (!a.isPinned && b.isPinned) return 1;
     return 0;
   });
 
+  const toggleTheme = () => {
+    setIsDarkMode(!isDarkMode);
+  };
+
   return (
-    <div className="app">
+    <div className={`app ${isDarkMode ? 'dark-mode' : 'light-mode'}`}>
       {/* Top Navigation */}
       <nav className="top-nav">
         <div className="nav-container">
@@ -149,11 +155,40 @@ function App() {
               <Bell size={20} />
               {notifications > 0 && <span className="notification-dot"></span>}
             </button>
-            <button className="icon-btn">
-              <User size={20} />
-            </button>
-            <button className="profile-btn">M</button>
-            <button className="join-btn">Join Club</button>
+            <div className="profile-menu-wrapper">
+              <button 
+                className="profile-btn-avatar"
+                onClick={() => setShowProfileMenu(!showProfileMenu)}
+              >
+                M
+              </button>
+              
+              {showProfileMenu && (
+                <div className="profile-dropdown">
+                  <button className="dropdown-item">
+                    <User size={18} />
+                    <span>Profile</span>
+                  </button>
+                  <button className="dropdown-item">
+                    <Bookmark size={18} />
+                    <span>Saved</span>
+                  </button>
+                  <button className="dropdown-item">
+                    <Settings size={18} />
+                    <span>Account</span>
+                  </button>
+                  <button className="dropdown-item" onClick={toggleTheme}>
+                    {isDarkMode ? <Sun size={18} /> : <Moon size={18} />}
+                    <span>Switch theme</span>
+                  </button>
+                  <div className="dropdown-divider"></div>
+                  <button className="dropdown-item logout">
+                    <LogOut size={18} />
+                    <span>Sign Out</span>
+                  </button>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </nav>
