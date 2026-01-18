@@ -1,5 +1,9 @@
 import React, { useState } from 'react';
-import { Search, Bell, User, Home, BarChart3, Trophy, Hash, MessageCircle, Heart, Share2, Bookmark, HelpCircle, CheckCircle, Settings, LogOut, Moon, Sun } from 'lucide-react';
+import {
+  Search, Bell, User, Home, BarChart3, Trophy, Hash,
+  MessageCircle, Heart, Share2, Bookmark, HelpCircle,
+  CheckCircle, Settings, LogOut, Moon, Sun
+} from 'lucide-react';
 import './App.css';
 
 function App() {
@@ -14,6 +18,57 @@ function App() {
   const [profileTab, setProfileTab] = useState('achievements');
   const [showLeaderboard, setShowLeaderboard] = useState(false);
   const [leaderboardTab, setLeaderboardTab] = useState('weekly');
+  const [likedPosts, setLikedPosts] = useState([]);
+  const [savedPosts, setSavedPosts] = useState([]);
+  const [expandedPost, setExpandedPost] = useState(null);
+  const [commentText, setCommentText] = useState('');
+  const [postComments, setPostComments] = useState({});
+  const [comments, setComments] = useState({});
+  
+  // ✅ NEW: Notification panel state
+  const [showNotifications, setShowNotifications] = useState(false);
+  const [showChat, setShowChat] = useState(false);
+  
+  // Sample notification data
+  const notificationsList = [
+    {
+      id: 1,
+      type: 'team',
+      avatar: '/Codee Icon.png',
+      title: 'Codédex Team',
+      badge: '👥',
+      message: 'Introducing Lumi, your personal coding companion!',
+      time: '7d',
+      isNew: true
+    },
+    {
+      id: 2,
+      type: 'event',
+      image: '/event-thumbnail.png',
+      title: 'The Monthly Challenge is live!',
+      subtitle: 'Join us this month',
+      time: '7d',
+      isNew: false
+    },
+    {
+      id: 3,
+      type: 'achievement',
+      image: '/achievement.png',
+      title: 'You earned the Intro to JS badge!',
+      subtitle: 'Congrats on your progress!',
+      time: '7d',
+      isNew: false
+    },
+    {
+      id: 4,
+      type: 'event',
+      image: '/event2.png',
+      title: 'Free Webinar with Google',
+      subtitle: 'Developer Relations 101',
+      time: '30d',
+      isNew: false
+    }
+  ];
 
   const sidebarItems = [
     { id: 'home', label: 'Home', icon: Home },
@@ -40,6 +95,7 @@ function App() {
       id: 1,
       type: 'survey',
       timeAgo: '19h',
+      category: 'qotw',
       surveyQuestion: "What's one thing you want to clean up to step into 2026 feeling lighter? 🪶",
       surveyDescription: 'Question of the Week #89: Share your thoughts on starting the year by "getting light" - intentionally clearing out one area of your life so you can move forward with more focus and energy.',
       surveyOptions: [
@@ -52,14 +108,15 @@ function App() {
       ],
       responses: 234,
       comments: 56,
-      isPinned: true
+      isPinned: true,
+      isAdmin: true
     },
     {
       id: 2,
       username: '@emmacodes',
       title: 'The Codebreaker',
       timeAgo: '5h',
-      category: 'Python',
+      category: 'python',
       content: 'Just finished my first data visualization project! Used pandas and matplotlib to analyze and visualize COVID-19 trends. The hardest part was cleaning the data, but I learned so much about handling real-world datasets. Happy to share my code if anyone wants to see it!',
       likes: 142,
       comments: 28,
@@ -72,7 +129,7 @@ function App() {
       username: '@alexdev',
       title: 'The Debugger',
       timeAgo: '12h',
-      category: 'Web Development',
+      category: 'html',
       content: 'CSS Grid is a game changer! Finally took the time to properly learn CSS Grid and wow, it makes responsive layouts so much easier. If you\'re still using floats and position absolute for everything, I highly recommend checking it out.',
       likes: 89,
       comments: 15,
@@ -85,7 +142,7 @@ function App() {
       username: '@jordancodes',
       title: 'The Networker',
       timeAgo: '1d',
-      category: 'General',
+      category: 'general',
       content: '100 Day Streak! 🎉 I can\'t believe I\'ve maintained a 100-day coding streak! Started with just 15 minutes a day and now I\'m building full projects. Consistency really does compound.',
       likes: 456,
       comments: 89,
@@ -98,10 +155,58 @@ function App() {
       username: '@priyalearns',
       title: 'The Open Architect',
       timeAgo: '8h',
-      category: 'Help',
+      category: 'help',
       content: 'Struggling with Python decorators, any tips? I understand the syntax but I\'m having trouble understanding when and why to use decorators in real projects. Does anyone have good real-world examples?',
       likes: 34,
       comments: 42,
+      isPinned: false,
+      isAdmin: false,
+      type: 'post'
+    },
+    {
+      id: 6,
+      username: '@CODEE System',
+      title: 'Admin',
+      timeAgo: '2d',
+      category: 'qotw',
+      type: 'survey',
+      surveyQuestion: "What's your biggest coding challenge this month?",
+      surveyDescription: 'Question of the Week #88: Share the programming challenge that is keeping you up at night!',
+      surveyOptions: [
+        'Understanding algorithms',
+        'Debugging complex code',
+        'Learning new frameworks',
+        'Time management',
+        'Staying motivated',
+        'Other'
+      ],
+      responses: 189,
+      comments: 43,
+      isPinned: false,
+      isAdmin: true
+    },
+    {
+      id: 7,
+      username: '@memeLord',
+      title: 'The Jester',
+      timeAgo: '3h',
+      category: 'memes',
+      content: 'When you finally fix a bug after 3 hours and realize it was just a missing semicolon 😂💀 #DevLife #CodingMemes',
+      likes: 523,
+      comments: 67,
+      isPinned: false,
+      isAdmin: false,
+      type: 'post'
+    },
+    {
+      id: 8,
+      username: '@webWizard',
+      title: 'The Frontend Master',
+      timeAgo: '6h',
+      category: 'html',
+      content: 'Just launched my first responsive website using HTML5, CSS3, and vanilla JavaScript! No frameworks, just pure web fundamentals. Check it out and let me know what you think!',
+      likes: 234,
+      comments: 45,
       isPinned: false,
       isAdmin: false,
       type: 'post'
@@ -147,10 +252,13 @@ function App() {
   ];
 
   const filteredPosts = posts.filter(post => {
-    const matchesSearch = searchQuery === '' || 
+    const matchesSearch = searchQuery === '' ||
       post.content?.toLowerCase().includes(searchQuery.toLowerCase()) ||
       post.surveyQuestion?.toLowerCase().includes(searchQuery.toLowerCase());
-    return matchesSearch;
+
+    const matchesCategory = selectedCategory === 'all' || post.category === selectedCategory;
+
+    return matchesSearch && matchesCategory;
   }).sort((a, b) => {
     if (a.isPinned && !b.isPinned) return -1;
     if (!a.isPinned && b.isPinned) return 1;
@@ -161,6 +269,60 @@ function App() {
     setIsDarkMode(!isDarkMode);
   };
 
+  const toggleLike = (postId) => {
+    if (likedPosts.includes(postId)) {
+      setLikedPosts(likedPosts.filter(id => id !== postId));
+    } else {
+      setLikedPosts([...likedPosts, postId]);
+    }
+  };
+
+  const toggleSave = (postId) => {
+    if (savedPosts.includes(postId)) {
+      setSavedPosts(savedPosts.filter(id => id !== postId));
+    } else {
+      setSavedPosts([...savedPosts, postId]);
+    }
+  };
+
+  const toggleComments = (postId) => {
+    if (expandedPost === postId) {
+      setExpandedPost(null);
+    } else {
+      setExpandedPost(postId);
+      setCommentText('');
+    }
+  };
+
+  const handleCommentSubmit = (postId) => {
+    if (commentText.trim()) {
+      const newComment = {
+        id: Date.now(),
+        username: '@riaree',
+        text: commentText,
+        timeAgo: 'Just now',
+        avatar: '/Ada profile.png'
+      };
+
+      setComments(prev => ({
+        ...prev,
+        [postId]: [...(prev[postId] || []), newComment]
+      }));
+
+      setPostComments(prev => ({
+        ...prev,
+        [postId]: (prev[postId] || 0) + 1
+      }));
+
+      console.log('Comment submitted for post', postId, ':', commentText);
+      setCommentText('');
+    }
+  };
+
+  const getCommentCount = (postId, originalCount) => {
+    return originalCount + (postComments[postId] || 0);
+  };
+
   return (
     <div className={`app ${isDarkMode ? 'dark-mode' : 'light-mode'}`}>
       {/* Top Navigation */}
@@ -168,8 +330,8 @@ function App() {
         <div className="nav-container">
           <div className="nav-left">
             <div className="logo">
-              {/* PLACEHOLDER: Replace with your logo image */}
-              <div className="logo-icon"><img src="/Codee Icon.png" alt="Logo" />
+              <div className="logo-icon">
+                <img src="/Codee Icon.png" alt="Logo" />
               </div>
               <span className="logo-text" style={{ cursor: 'pointer' }} onClick={() => {
                 setShowProfileView(false);
@@ -186,22 +348,27 @@ function App() {
             </div>
           </div>
           <div className="nav-right">
-            <button className="icon-btn">
+            <button className="icon-btn" onClick={() => {
+              setShowChat(!showChat);
+              setShowNotifications(false);
+            }}>
               <MessageCircle size={20} />
             </button>
-            <button className="icon-btn notification-btn">
+            <button className="icon-btn notification-btn" onClick={() => {
+              setShowNotifications(!showNotifications);
+              setShowChat(false);
+            }}>
               <Bell size={20} />
               {notifications > 0 && <span className="notification-dot"></span>}
             </button>
             <div className="profile-menu-wrapper">
-              <button 
+              <button
                 className="profile-btn-avatar"
                 onClick={() => setShowProfileMenu(!showProfileMenu)}
               >
-                {/* PLACEHOLDER: Replace 'M' with user's profile picture or initials */}
                 M
               </button>
-              
+
               {showProfileMenu && (
                 <div className="profile-dropdown">
                   <button className="dropdown-item" onClick={() => {
@@ -211,10 +378,6 @@ function App() {
                   }}>
                     <User size={18} />
                     <span>Profile</span>
-                  </button>
-                  <button className="dropdown-item">
-                    <Bookmark size={18} />
-                    <span>Saved</span>
                   </button>
                   <button className="dropdown-item">
                     <Settings size={18} />
@@ -236,8 +399,62 @@ function App() {
         </div>
       </nav>
 
+      {/* Notifications Panel */}
+      {showNotifications && (
+        <div className="notifications-panel">
+          <div className="notifications-header">
+            <h2>Notifications</h2>
+            <button className="close-panel" onClick={() => setShowNotifications(false)}>
+              ×
+            </button>
+          </div>
+          <div className="notifications-list">
+            {notificationsList.map((notif) => (
+              <div key={notif.id} className={`notification-item ${notif.isNew ? 'new' : ''}`}>
+                <div className="notification-avatar">
+                  {notif.type === 'team' ? (
+                    <>
+                      <img src={notif.avatar} alt="" />
+                      {notif.badge && <span className="notification-badge">{notif.badge}</span>}
+                    </>
+                  ) : (
+                    <div className="notification-thumbnail" style={{
+                      background: notif.image ? `url(${notif.image})` : '#70ead5'
+                    }}></div>
+                  )}
+                </div>
+                <div className="notification-content">
+                  <p className="notification-title">{notif.title}</p>
+                  {notif.subtitle && <p className="notification-subtitle">{notif.subtitle}</p>}
+                  {notif.message && <p className="notification-message">{notif.message}</p>}
+                  <span className="notification-time">{notif.time}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Chat Panel */}
+      {showChat && (
+        <div className="chat-panel">
+          <div className="chat-header">
+            <h2>Messages</h2>
+            <button className="close-panel" onClick={() => setShowChat(false)}>
+              ×
+            </button>
+          </div>
+          <div className="chat-list">
+            <div className="empty-chat">
+              <MessageCircle size={48} />
+              <p>No messages yet</p>
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className="main-layout">
-        {/* Left Sidebar - Always show, hide only on profile view */}
+        {/* Left Sidebar */}
         {!showProfileView && (
           <aside className="left-sidebar">
             <div className="sidebar-section">
@@ -248,8 +465,8 @@ function App() {
                     key={item.id}
                     className={`sidebar-item ${
                       (item.id === 'home' && !showLeaderboard && !showProfileView) ||
-                      (item.id === 'leaderboards' && showLeaderboard) 
-                        ? 'active' 
+                      (item.id === 'leaderboards' && showLeaderboard)
+                        ? 'active'
                         : ''
                     }`}
                     onClick={() => {
@@ -275,7 +492,13 @@ function App() {
                 {channels.map(channel => (
                   <button
                     key={channel.id}
-                    onClick={() => setSelectedCategory(channel.id)}
+                    onClick={() => {
+                      if (selectedCategory === channel.id) {
+                        setSelectedCategory('all');
+                      } else {
+                        setSelectedCategory(channel.id);
+                      }
+                    }}
                     className={`channel-item ${selectedCategory === channel.id ? 'active' : ''}`}
                   >
                     <Hash size={16} />
@@ -290,12 +513,9 @@ function App() {
         {/* Main Content */}
         <main className="main-content">
           {showLeaderboard ? (
-            // Leaderboard View
             <div className="leaderboard-view">
-              {/* Leaderboard Header */}
               <div className="leaderboard-header">
                 <div className="leaderboard-header-content">
-                  {/* PLACEHOLDER: Replace emoji with your trophy icon/image */}
                   <div className="leaderboard-icon">🏆</div>
                   <div className="leaderboard-header-text">
                     <h1>Leaderboards</h1>
@@ -304,7 +524,6 @@ function App() {
                 </div>
               </div>
 
-              {/* Leaderboard Tabs */}
               <div className="leaderboard-tabs-wrapper">
                 <div className="leaderboard-tabs">
                   <button
@@ -322,21 +541,18 @@ function App() {
                 </div>
               </div>
 
-              {/* Leaderboard Content */}
               <div className="leaderboard-content">
                 <div className="leaderboard-list">
                   {(leaderboardTab === 'weekly' ? weeklyLeaderboard : allTimeLeaderboard).map((user) => (
                     <div key={user.rank} className="leaderboard-item">
                       <div className="leaderboard-rank">{user.rank}</div>
                       <div className="leaderboard-user">
-                        {/* PLACEHOLDER: Replace with actual user profile pictures */}
                         <div className="user-avatar">
                           {user.username.charAt(0).toUpperCase()}
                         </div>
                         <div className="user-info">
                           <div className="user-name">
                             <span className="username">{user.username}</span>
-                            {/* PLACEHOLDER: Replace badge emoji with icon/image */}
                             <span className="badge">{user.badge}</span>
                           </div>
                           <span className="user-handle">{user.handle}</span>
@@ -349,15 +565,13 @@ function App() {
               </div>
             </div>
           ) : showProfileView ? (
-            // Profile View
             <div className="profile-view">
-              {/* Profile Header Banner */}
               <div className="profile-banner">
-                {/* PLACEHOLDER: Replace with your custom banner image */}
                 <div className="banner-image"></div>
                 <div className="profile-header-content">
-                  {/* PLACEHOLDER: Replace emoji with user's profile picture */}
-                  <div className="profile-avatar-large"><img src="/Ada profile.png" alt="Profile" /></div>
+                  <div className="profile-avatar-large">
+                    <img src="/Ada profile.png" alt="Profile" />
+                  </div>
                   <div className="profile-details">
                     <div className="profile-name-section">
                       <h1>riaree</h1>
@@ -384,7 +598,6 @@ function App() {
                 </div>
               </div>
 
-              {/* Profile Stats Bar */}
               <div className="profile-stats-bar">
                 <div className="stat-item-inline">
                   <div className="stat-icon">⭐</div>
@@ -407,16 +620,8 @@ function App() {
                     <p className="stat-label">Badges</p>
                   </div>
                 </div>
-                <div className="stat-item-inline">
-                  <div className="stat-icon">🔥</div>
-                  <div>
-                    <p className="stat-value">0</p>
-                    <p className="stat-label">Day streak</p>
-                  </div>
-                </div>
               </div>
 
-              {/* Profile Tabs */}
               <div className="profile-tabs-container">
                 <div className="profile-tabs">
                   <button
@@ -440,7 +645,6 @@ function App() {
                 </div>
               </div>
 
-              {/* Profile Tab Content */}
               <div className="profile-tab-content">
                 {profileTab === 'achievements' && (
                   <div className="achievements-section">
@@ -452,15 +656,62 @@ function App() {
                     </div>
                   </div>
                 )}
+
                 {profileTab === 'saved' && (
                   <div className="saved-section">
-                    <div className="empty-state">
-                      <Bookmark size={48} />
-                      <h3>No saved posts yet</h3>
-                      <p>Save posts to easily find them later</p>
-                    </div>
+                    {savedPosts.length > 0 ? (
+                      <div className="posts-feed">
+                        {posts.filter(post => savedPosts.includes(post.id)).map(post => (
+                          <article key={post.id} className="post-card">
+                            {post.type === 'survey' ? (
+                              <div className="survey-card">
+                                <div className="survey-header">
+                                  <div className="survey-header-left">
+                                    <div className="survey-icon">
+                                      <HelpCircle size={24} />
+                                    </div>
+                                    <div className="survey-info">
+                                      <span className="system-badge">CODEE System</span>
+                                      <span className="qotw-badge">📊 QUESTION OF THE WEEK</span>
+                                    </div>
+                                  </div>
+                                  <span className="post-time">{post.timeAgo}</span>
+                                </div>
+                                <div className="survey-content">
+                                  <h2 className="survey-question">{post.surveyQuestion}</h2>
+                                  <p className="survey-description">{post.surveyDescription}</p>
+                                </div>
+                              </div>
+                            ) : (
+                              <>
+                                <div className="post-avatar">
+                                  <img src="/Ada profile.png" alt="Profile" />
+                                </div>
+                                <div className="post-content">
+                                  <div className="post-header">
+                                    <span className="post-username">{post.username}</span>
+                                    {post.title && (
+                                      <span className="post-title-badge">{post.title}</span>
+                                    )}
+                                    <span className="post-time">• {post.timeAgo}</span>
+                                  </div>
+                                  <p className="post-text">{post.content}</p>
+                                </div>
+                              </>
+                            )}
+                          </article>
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="empty-state">
+                        <Bookmark size={48} />
+                        <h3>No saved posts yet</h3>
+                        <p>Save posts to easily find them later</p>
+                      </div>
+                    )}
                   </div>
                 )}
+
                 {profileTab === 'posts' && (
                   <div className="posts-section">
                     <div className="empty-state">
@@ -473,13 +724,10 @@ function App() {
               </div>
             </div>
           ) : (
-            // Community Feed View
             <>
-              {/* Community Header */}
               <div className="community-header">
                 <div className="header-content">
-                  <div className="header-icon"><img src="/Codee Icon.png" alt="Profile" />
-                  </div>
+                  <div className="header-icon"><img src="/Codee Icon.png" alt="Logo" /></div>
                   <div>
                     <h1>CODEE Community</h1>
                     <p>Let's make magic together ✨◊</p>
@@ -487,7 +735,6 @@ function App() {
                 </div>
               </div>
 
-              {/* Tabs */}
               <div className="tabs-container">
                 <div className="tabs">
                   {tabs.map(tab => (
@@ -502,7 +749,6 @@ function App() {
                 </div>
               </div>
 
-              {/* Search Bar */}
               <div className="content-wrapper">
                 <div className="search-container">
                   <Search className="search-icon" size={20} />
@@ -515,16 +761,13 @@ function App() {
                   />
                 </div>
 
-                {/* Posts Feed */}
                 <div className="posts-feed">
                   {filteredPosts.map(post => (
                     <article key={post.id} className={`post-card ${post.isPinned ? 'pinned' : ''}`}>
                       {post.type === 'survey' ? (
-                        // Survey Card
                         <div className="survey-card">
                           <div className="survey-header">
                             <div className="survey-header-left">
-                              {/* PLACEHOLDER: Replace HelpCircle icon with custom survey icon */}
                               <div className="survey-icon">
                                 <HelpCircle size={24} />
                               </div>
@@ -570,11 +813,11 @@ function App() {
                           </div>
                         </div>
                       ) : (
-                        // Regular Post
                         <>
-                          {/* PLACEHOLDER: Replace emoji with actual user profile picture */}
-                          <div className="post-avatar"><img src="/Ada profile.png" alt="Profile" />
-</div>
+                          <div className="post-avatar">
+                            <img src="/Ada profile.png" alt="Profile" />
+                          </div>
+
                           <div className="post-content">
                             <div className="post-header">
                               <span className="post-username">{post.username}</span>
@@ -586,23 +829,87 @@ function App() {
                                 <span className="post-category">{post.category}</span>
                               )}
                             </div>
+
                             <p className="post-text">{post.content}</p>
+
                             <div className="post-actions">
-                              <button className="action-btn">
-                                <Heart size={20} />
-                                <span>{post.likes}</span>
+                              <button
+                                className={`action-btn ${likedPosts.includes(post.id) ? 'liked' : ''}`}
+                                onClick={() => toggleLike(post.id)}
+                              >
+                                <Heart size={20} fill={likedPosts.includes(post.id) ? '#ef4444' : 'none'} />
+                                <span>{post.likes + (likedPosts.includes(post.id) ? 1 : 0)}</span>
                               </button>
-                              <button className="action-btn">
+
+                              <button
+                                className="action-btn"
+                                onClick={() => toggleComments(post.id)}
+                              >
                                 <MessageCircle size={20} />
-                                <span>{post.comments}</span>
+                                <span>{getCommentCount(post.id, post.comments)}</span>
                               </button>
+
                               <button className="action-btn">
                                 <Share2 size={20} />
                               </button>
-                              <button className="action-btn bookmark">
-                                <Bookmark size={20} />
+
+                              <button
+                                className={`action-btn bookmark ${savedPosts.includes(post.id) ? 'saved' : ''}`}
+                                onClick={() => toggleSave(post.id)}
+                              >
+                                <Bookmark size={20} fill={savedPosts.includes(post.id) ? '#70EAD5' : 'none'} />
                               </button>
                             </div>
+
+                            {expandedPost === post.id && (
+                              <div className="comment-section">
+                                {comments[post.id] && comments[post.id].length > 0 && (
+                                  <div className="comment-list">
+                                    {comments[post.id].map((c) => (
+                                      <div key={c.id} className="comment-item">
+                                        <div className="comment-avatar">
+                                          <img src={c.avatar} alt="Commenter" />
+                                        </div>
+                                        <div className="comment-body">
+                                          <div className="comment-meta">
+                                            <span className="comment-username">{c.username}</span>
+                                            <span className="comment-time">• {c.timeAgo}</span>
+                                          </div>
+                                          <p className="comment-text">{c.text}</p>
+                                        </div>
+                                      </div>
+                                    ))}
+                                  </div>
+                                )}
+
+                                <div className="comment-input-wrapper">
+                                  <div className="comment-avatar">
+                                    <img src="/Ada profile.png" alt="Your profile" />
+                                  </div>
+                                  <div className="comment-input-container">
+                                    <textarea
+                                      className="comment-input"
+                                      placeholder="Add a comment..."
+                                      value={commentText}
+                                      onChange={(e) => setCommentText(e.target.value)}
+                                      onKeyPress={(e) => {
+                                        if (e.key === 'Enter' && !e.shiftKey) {
+                                          e.preventDefault();
+                                          handleCommentSubmit(post.id);
+                                        }
+                                      }}
+                                    />
+                                    <button
+                                      className="comment-submit-btn"
+                                      onClick={() => handleCommentSubmit(post.id)}
+                                      disabled={!commentText.trim()}
+                                    >
+                                      Reply
+                                    </button>
+                                  </div>
+                                </div>
+                              </div>
+                            )}
                           </div>
                         </>
                       )}
@@ -614,14 +921,13 @@ function App() {
           )}
         </main>
 
-        {/* Right Sidebar - Hide when viewing profile or leaderboard */}
+        {/* Right Sidebar */}
         {!showProfileView && !showLeaderboard && (
           <aside className="right-sidebar">
-            {/* Profile Card */}
             <div className="profile-card">
               <div className="profile-header">
-                {/* PLACEHOLDER: Replace emoji with user's profile picture */}
-                <div className="profile-avatar"><img src="/Ada profile.png" alt="Profile" />
+                <div className="profile-avatar">
+                  <img src="/Ada profile.png" alt="Profile" />
                 </div>
                 <div className="profile-info">
                   <div className="profile-name-row">
@@ -631,7 +937,7 @@ function App() {
                   <p>Level 1</p>
                 </div>
               </div>
-              
+
               <div className="profile-stats">
                 <div className="stat">
                   <div className="stat-icon">⭐</div>
@@ -640,7 +946,7 @@ function App() {
                     <p className="stat-value">0</p>
                   </div>
                 </div>
-                
+
                 <div className="stat">
                   <div className="stat-icon">🥉</div>
                   <div>
@@ -648,7 +954,7 @@ function App() {
                     <p className="stat-value rank">Bronze</p>
                   </div>
                 </div>
-                
+
                 <div className="stat">
                   <div className="stat-icon">💎</div>
                   <div>
@@ -656,18 +962,9 @@ function App() {
                     <p className="stat-value">0</p>
                   </div>
                 </div>
-                
-                <div className="stat">
-                  <div className="stat-icon">🔥</div>
-                  <div>
-                    <p className="stat-label">Day streak</p>
-                    <p className="stat-value">0</p>
-                  </div>
-                </div>
               </div>
             </div>
 
-            {/* News Section */}
             <div className="news-section">
               <div className="section-header">
                 <h3>CODEE News</h3>
@@ -676,7 +973,6 @@ function App() {
               <div className="news-list">
                 {news.map((item, index) => (
                   <div key={index} className="news-item">
-                    {/* PLACEHOLDER: Replace with actual news thumbnail images */}
                     <div className="news-thumbnail"></div>
                     <div className="news-content">
                       <h4>{item.title}</h4>
@@ -687,7 +983,6 @@ function App() {
               </div>
             </div>
 
-            {/* Events Section */}
             <div className="events-section">
               <h3>Upcoming Events</h3>
               <div className="events-list">
@@ -706,7 +1001,6 @@ function App() {
               </div>
             </div>
 
-            {/* Footer */}
             <div className="sidebar-footer">
               <button className="guidelines-link">Community Guidelines</button>
               <p className="copyright">© 2025 Niteowl, Inc. • Terms • Privacy Policy</p>
