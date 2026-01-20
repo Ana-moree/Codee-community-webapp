@@ -24,12 +24,103 @@ function App() {
   const [commentText, setCommentText] = useState('');
   const [postComments, setPostComments] = useState({});
   const [comments, setComments] = useState({});
-  
-  // ✅ NEW: Notification panel state
+  const currentUser = '@riaree';
+  const [newPostText, setNewPostText] = useState('');
+  const [userPosts, setUserPosts] = useState([]);
   const [showNotifications, setShowNotifications] = useState(false);
   const [showChat, setShowChat] = useState(false);
+  const [viewingUser, setViewingUser] = useState(currentUser);
+  const [followedUsers, setFollowedUsers] = useState([]);
+  const [userData, setUserData] = useState({
+    '@riaree': { followers: 0, following: 0 },
+    '@emmacodes': { followers: 12, following: 8 },
+    '@alexdev': { followers: 45, following: 23 },
+    '@jordancodes': { followers: 189, following: 67 },
+    '@priyalearns': { followers: 34, following: 15 },
+    '@memeLord': { followers: 234, following: 89 },
+    '@webWizard': { followers: 78, following: 34 },
+    '@CODEE System': { followers: 999, following: 0 }
+  });
+
+
+  // Map users to their character profiles
+  const userProfiles = {
+  '@riaree': {
+    image: '/character profile pics/Ada profile.png',
+    title: 'The Innovator'
+  },
+  '@emmacodes': {
+    image: '/character profile pics/Alan profile.png',
+    title: 'The Codebreaker'
+  },
+  '@alexdev': {
+    image: '/character profile pics/Grace profile.png',
+    title: 'The Debugger'
+  },
+  '@jordancodes': {
+    image: '/character profile pics/Mark profile.png',
+    title: 'The Networker'
+  },
+  '@priyalearns': {
+    image: '/character profile pics/Linus profile.png',
+    title: 'The Open Architect'
+  },
+  '@memeLord': {
+    image: '/character profile pics/Ada profile.png',
+    title: 'The Jester'
+  },
+  '@webWizard': {
+    image: '/character profile pics/Grace profile.png',
+    title: 'The Frontend Master'
+  },
+  '@CODEE System': {
+    image: '/Codee Icon.png',
+    title: 'Admin'
+  }
+};
+
+
+
+  const openUserProfile = (username) => {
+    setViewingUser(username);
+    setShowProfileView(true);
+    setShowLeaderboard(false);
+    setShowProfileMenu(false);
+  };
+
+  const toggleFollowUser = (username) => {
+    if (!username || username === currentUser) return;
+
+    const isFollowing = followedUsers.includes(username);
+
+    setFollowedUsers((prev) =>
+      isFollowing ? prev.filter((u) => u !== username) : [...prev, username]
+    );
+
+    setUserData((prev) => {
+      const safe = (u) => prev[u] || { followers: 0, following: 0 };
+
+      const target = safe(username);
+      const me = safe(currentUser);
+
+      const newTargetFollowers = Math.max(
+        0,
+        target.followers + (isFollowing ? -1 : 1)
+      );
+
+      const newMeFollowing = Math.max(
+        0,
+        me.following + (isFollowing ? -1 : 1)
+      );
+
+      return {
+        ...prev,
+        [username]: { ...target, followers: newTargetFollowers },
+        [currentUser]: { ...me, following: newMeFollowing }
+      };
+    });
+  };
   
-  // Sample notification data
   const notificationsList = [
     {
       id: 1,
@@ -251,19 +342,19 @@ function App() {
     { rank: 10, username: 'Almond', handle: '@almond07', xp: 21430, badge: '🛡️' }
   ];
 
-  const filteredPosts = posts.filter(post => {
-    const matchesSearch = searchQuery === '' ||
-      post.content?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      post.surveyQuestion?.toLowerCase().includes(searchQuery.toLowerCase());
+  const filteredPosts = [...userPosts, ...posts].filter(post => {
+  const matchesSearch = searchQuery === '' ||
+    post.content?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    post.surveyQuestion?.toLowerCase().includes(searchQuery.toLowerCase());
 
-    const matchesCategory = selectedCategory === 'all' || post.category === selectedCategory;
+  const matchesCategory = selectedCategory === 'all' || post.category === selectedCategory;
 
-    return matchesSearch && matchesCategory;
-  }).sort((a, b) => {
-    if (a.isPinned && !b.isPinned) return -1;
-    if (!a.isPinned && b.isPinned) return 1;
-    return 0;
-  });
+  return matchesSearch && matchesCategory;
+}).sort((a, b) => {
+  if (a.isPinned && !b.isPinned) return -1;
+  if (!a.isPinned && b.isPinned) return 1;
+  return 0;
+});
 
   const toggleTheme = () => {
     setIsDarkMode(!isDarkMode);
@@ -294,6 +385,27 @@ function App() {
     }
   };
 
+        const handleCreatePost = () => {
+  if (newPostText.trim()) {
+    const newPost = {
+      id: Date.now(),
+      username: currentUser,
+      title: userProfiles[currentUser]?.title || 'The Innovator',
+      timeAgo: 'Just now',
+      category: 'general',
+      content: newPostText,
+      likes: 0,
+      comments: 0,
+      isPinned: false,
+      isAdmin: false,
+      type: 'post'
+    };
+
+    setUserPosts(prev => [newPost, ...prev]);
+    setNewPostText('');
+  }
+};
+
   const handleCommentSubmit = (postId) => {
     if (commentText.trim()) {
       const newComment = {
@@ -301,7 +413,7 @@ function App() {
         username: '@riaree',
         text: commentText,
         timeAgo: 'Just now',
-        avatar: '/Ada profile.png'
+        avatar: userProfiles['@riaree']?.image || '/Ada profile.png'
       };
 
       setComments(prev => ({
@@ -314,7 +426,6 @@ function App() {
         [postId]: (prev[postId] || 0) + 1
       }));
 
-      console.log('Comment submitted for post', postId, ':', commentText);
       setCommentText('');
     }
   };
@@ -323,9 +434,12 @@ function App() {
     return originalCount + (postComments[postId] || 0);
   };
 
+  const profileStats = userData[viewingUser] || { followers: 0, following: 0 };
+  const isOwnProfile = viewingUser === currentUser;
+  const isFollowing = followedUsers.includes(viewingUser);
+
   return (
     <div className={`app ${isDarkMode ? 'dark-mode' : 'light-mode'}`}>
-      {/* Top Navigation */}
       <nav className="top-nav">
         <div className="nav-container">
           <div className="nav-left">
@@ -371,11 +485,7 @@ function App() {
 
               {showProfileMenu && (
                 <div className="profile-dropdown">
-                  <button className="dropdown-item" onClick={() => {
-                    setShowProfileView(true);
-                    setShowProfileMenu(false);
-                    setShowLeaderboard(false);
-                  }}>
+                  <button className="dropdown-item" onClick={() => openUserProfile(currentUser)}>
                     <User size={18} />
                     <span>Profile</span>
                   </button>
@@ -399,7 +509,6 @@ function App() {
         </div>
       </nav>
 
-      {/* Notifications Panel */}
       {showNotifications && (
         <div className="notifications-panel">
           <div className="notifications-header">
@@ -435,7 +544,6 @@ function App() {
         </div>
       )}
 
-      {/* Chat Panel */}
       {showChat && (
         <div className="chat-panel">
           <div className="chat-header">
@@ -454,7 +562,6 @@ function App() {
       )}
 
       <div className="main-layout">
-        {/* Left Sidebar */}
         {!showProfileView && (
           <aside className="left-sidebar">
             <div className="sidebar-section">
@@ -510,7 +617,6 @@ function App() {
           </aside>
         )}
 
-        {/* Main Content */}
         <main className="main-content">
           {showLeaderboard ? (
             <div className="leaderboard-view">
@@ -552,7 +658,12 @@ function App() {
                         </div>
                         <div className="user-info">
                           <div className="user-name">
-                            <span className="username">{user.username}</span>
+                            <span
+                              className="username clickable-username"
+                              onClick={() => openUserProfile(user.handle)}
+                            >
+                              {user.username}
+                            </span>
                             <span className="badge">{user.badge}</span>
                           </div>
                           <span className="user-handle">{user.handle}</span>
@@ -570,12 +681,12 @@ function App() {
                 <div className="banner-image"></div>
                 <div className="profile-header-content">
                   <div className="profile-avatar-large">
-                    <img src="/Ada profile.png" alt="Profile" />
+                    <img src={userProfiles[viewingUser]?.image || '/character profile pics/Ada profile.png'} alt="Profile" />
                   </div>
                   <div className="profile-details">
                     <div className="profile-name-section">
-                      <h1>riaree</h1>
-                      <span className="profile-title-badge-large">The Innovator</span>
+                      <h1>{viewingUser.replace('@', '')}</h1>
+                      <span className="profile-title-badge-large">{userProfiles[viewingUser]?.title || 'The Innovator'}</span>
                     </div>
                     <p className="profile-level">Level 1</p>
                     <div className="profile-meta">
@@ -584,17 +695,26 @@ function App() {
                         Joined Jan 2026
                       </span>
                       <span className="profile-meta-item">
-                        <span className="meta-count">0</span> Followers
+                        <span className="meta-count">{profileStats.followers}</span> Followers
                       </span>
                       <span className="profile-meta-item">
-                        <span className="meta-count">0</span> Following
+                        <span className="meta-count">{profileStats.following}</span> Followings
                       </span>
                     </div>
                   </div>
-                  <button className="edit-profile-btn">
-                    <Settings size={18} />
-                    Edit profile
-                  </button>
+                  {isOwnProfile ? (
+                    <button className="edit-profile-btn">
+                      <Settings size={18} />
+                      Edit profile
+                    </button>
+                  ) : (
+                    <button
+                      className="edit-profile-btn"
+                      onClick={() => toggleFollowUser(viewingUser)}
+                    >
+                      {isFollowing ? 'Following' : 'Follow'}
+                    </button>
+                  )}
                 </div>
               </div>
 
@@ -685,11 +805,16 @@ function App() {
                             ) : (
                               <>
                                 <div className="post-avatar">
-                                  <img src="/Ada profile.png" alt="Profile" />
+                                  <img src={userProfiles[post.username]?.image || '/Ada profile.png'} alt="Profile" />
                                 </div>
                                 <div className="post-content">
                                   <div className="post-header">
-                                    <span className="post-username">{post.username}</span>
+                                    <span
+                                      className="post-username clickable-username"
+                                      onClick={() => openUserProfile(post.username)}
+                                    >
+                                      {post.username}
+                                    </span>
                                     {post.title && (
                                       <span className="post-title-badge">{post.title}</span>
                                     )}
@@ -750,6 +875,31 @@ function App() {
               </div>
 
               <div className="content-wrapper">
+                <div className="post-composer">
+                  <div className="composer-avatar">
+                    <img src={userProfiles[currentUser]?.image || '/character profile pics/Ada profile.png'} alt="Your profile" />
+                  </div>
+                  <input
+                    type="text"
+                    placeholder="What's on your mind?"
+                    value={newPostText}
+                    onChange={(e) => setNewPostText(e.target.value)}
+                    onKeyPress={(e) => {
+                  if (e.key === 'Enter' && newPostText.trim()) {
+                    handleCreatePost();
+                  }
+                }}
+                className="composer-input"
+              />
+              <button 
+                className="post-btn" 
+                disabled={!newPostText.trim()}
+                onClick={handleCreatePost}
+              >
+                Post
+              </button>
+                </div>
+  
                 <div className="search-container">
                   <Search className="search-icon" size={20} />
                   <input
@@ -815,12 +965,17 @@ function App() {
                       ) : (
                         <>
                           <div className="post-avatar">
-                            <img src="/Ada profile.png" alt="Profile" />
+                            <img src={userProfiles[post.username]?.image || '/Ada profile.png'} alt="Profile" />
                           </div>
 
                           <div className="post-content">
                             <div className="post-header">
-                              <span className="post-username">{post.username}</span>
+                              <span
+                                className="post-username clickable-username"
+                                onClick={() => openUserProfile(post.username)}
+                              >
+                                {post.username}
+                              </span>
                               {post.title && (
                                 <span className="post-title-badge">{post.title}</span>
                               )}
@@ -868,11 +1023,17 @@ function App() {
                                     {comments[post.id].map((c) => (
                                       <div key={c.id} className="comment-item">
                                         <div className="comment-avatar">
-                                          <img src={c.avatar} alt="Commenter" />
+                                          <img src={userProfiles[c.username]?.image || '/character profile pics/Ada profile.png'} alt="Commenter"/>
+
                                         </div>
                                         <div className="comment-body">
                                           <div className="comment-meta">
-                                            <span className="comment-username">{c.username}</span>
+                                            <span
+                                              className="comment-username clickable-username"
+                                              onClick={() => openUserProfile(c.username)}
+                                            >
+                                              {c.username}
+                                            </span>
                                             <span className="comment-time">• {c.timeAgo}</span>
                                           </div>
                                           <p className="comment-text">{c.text}</p>
@@ -884,7 +1045,8 @@ function App() {
 
                                 <div className="comment-input-wrapper">
                                   <div className="comment-avatar">
-                                    <img src="/Ada profile.png" alt="Your profile" />
+                                    <img src={userProfiles[currentUser]?.image || '/character profile pics/Ada profile.png'} alt="Your profile" />
+
                                   </div>
                                   <div className="comment-input-container">
                                     <textarea
@@ -921,17 +1083,16 @@ function App() {
           )}
         </main>
 
-        {/* Right Sidebar */}
         {!showProfileView && !showLeaderboard && (
           <aside className="right-sidebar">
             <div className="profile-card">
               <div className="profile-header">
                 <div className="profile-avatar">
-                  <img src="/Ada profile.png" alt="Profile" />
+                  <img src="/character profile pics/Ada profile.png" alt="Profile" />
                 </div>
                 <div className="profile-info">
                   <div className="profile-name-row">
-                    <h3>riaree</h3>
+                    <h3>{currentUser.replace('@', '')}</h3>
                     <span className="profile-title-badge">The Innovator</span>
                   </div>
                   <p>Level 1</p>
