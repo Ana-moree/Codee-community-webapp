@@ -29,17 +29,45 @@ function App() {
   const [userPosts, setUserPosts] = useState([]);
   const [showNotifications, setShowNotifications] = useState(false);
   const [showChat, setShowChat] = useState(false);
+  const [activeChats, setActiveChats] = useState([]);
+  const [selectedChat, setSelectedChat] = useState(null);
+  const [chatMessages, setChatMessages] = useState({});
+  const [messageInput, setMessageInput] = useState('');
   const [viewingUser, setViewingUser] = useState(currentUser);
-  const [followedUsers, setFollowedUsers] = useState([]);
+  const [followedUsers, setFollowedUsers] = useState(['@emmacodes', '@alexdev']);
+  const [showFollowersModal, setShowFollowersModal] = useState(false);
+  const [followersModalType, setFollowersModalType] = useState('followers');
+  const [showEditProfile, setShowEditProfile] = useState(false);
+  const [userBios, setUserBios] = useState({
+  '@riaree': 'Passionate about coding and innovation. Always learning!',
+  '@emmacodes': 'Breaking codes and building solutions.',
+  '@alexdev': 'Debugging the world, one line at a time.',
+  '@jordancodes': 'Connecting ideas and people through technology.',
+  '@priyalearns': 'Open source enthusiast and lifelong learner.',
+  '@memeLord': 'Coding by day, meme-ing by night.',
+  '@webWizard': 'Crafting beautiful web experiences.',
+  '@CODEE System': 'Official CODEE system account.'
+});
+  const [editBioText, setEditBioText] = useState('');
+  const [followRelationships, setFollowRelationships] = useState({
+    '@riaree': { followers: [], following: ['@emmacodes', '@alexdev'] },
+    '@emmacodes': { followers: ['@riaree', '@jordancodes'], following: ['@priyalearns'] },
+    '@alexdev': { followers: ['@riaree', '@memeLord'], following: ['@webWizard'] },
+    '@jordancodes': { followers: ['@priyalearns'], following: ['@emmacodes', '@alexdev'] },
+    '@priyalearns': { followers: ['@emmacodes'], following: ['@jordancodes'] },
+    '@memeLord': { followers: [], following: ['@alexdev', '@webWizard'] },
+    '@webWizard': { followers: ['@alexdev', '@memeLord'], following: [] },
+    '@CODEE System': { followers: [], following: [] }
+  });
   const [userData, setUserData] = useState({
-    '@riaree': { followers: 0, following: 0 },
-    '@emmacodes': { followers: 12, following: 8 },
-    '@alexdev': { followers: 45, following: 23 },
-    '@jordancodes': { followers: 189, following: 67 },
-    '@priyalearns': { followers: 34, following: 15 },
-    '@memeLord': { followers: 234, following: 89 },
-    '@webWizard': { followers: 78, following: 34 },
-    '@CODEE System': { followers: 999, following: 0 }
+    '@riaree': { followers: 0, following: 2 },
+    '@emmacodes': { followers: 2, following: 1 },
+    '@alexdev': { followers: 2, following: 1 },
+    '@jordancodes': { followers: 1, following: 2 },
+    '@priyalearns': { followers: 1, following: 1 },
+    '@memeLord': { followers: 0, following: 2 },
+    '@webWizard': { followers: 2, following: 0 },
+    '@CODEE System': { followers: 0, following: 0 }
   });
 
 
@@ -96,6 +124,45 @@ function App() {
     setFollowedUsers((prev) =>
       isFollowing ? prev.filter((u) => u !== username) : [...prev, username]
     );
+
+    // Update follow relationships
+    setFollowRelationships((prev) => {
+      const newRelationships = { ...prev };
+      
+      // Initialize if doesn't exist
+      if (!newRelationships[currentUser]) {
+        newRelationships[currentUser] = { followers: [], following: [] };
+      }
+      if (!newRelationships[username]) {
+        newRelationships[username] = { followers: [], following: [] };
+      }
+
+      if (isFollowing) {
+        // Unfollow: remove username from current user's following
+        newRelationships[currentUser] = {
+          ...newRelationships[currentUser],
+          following: newRelationships[currentUser].following.filter(u => u !== username)
+        };
+        // Remove current user from target's followers
+        newRelationships[username] = {
+          ...newRelationships[username],
+          followers: newRelationships[username].followers.filter(u => u !== currentUser)
+        };
+      } else {
+        // Follow: add username to current user's following
+        newRelationships[currentUser] = {
+          ...newRelationships[currentUser],
+          following: [...newRelationships[currentUser].following, username]
+        };
+        // Add current user to target's followers
+        newRelationships[username] = {
+          ...newRelationships[username],
+          followers: [...newRelationships[username].followers, currentUser]
+        };
+      }
+
+      return newRelationships;
+    });
 
     setUserData((prev) => {
       const safe = (u) => prev[u] || { followers: 0, following: 0 };
@@ -434,9 +501,79 @@ function App() {
     return originalCount + (postComments[postId] || 0);
   };
 
-  const profileStats = userData[viewingUser] || { followers: 0, following: 0 };
+ const profileStats = userData[viewingUser] || { followers: 0, following: 0 };
   const isOwnProfile = viewingUser === currentUser;
   const isFollowing = followedUsers.includes(viewingUser);
+
+  const getFollowersList = () => {
+    const relationships = followRelationships[viewingUser];
+    if (!relationships) return [];
+    return relationships.followers || [];
+  };
+
+  const getFollowingList = () => {
+    const relationships = followRelationships[viewingUser];
+    if (!relationships) return [];
+    return relationships.following || [];
+  };
+
+  const openFollowersModal = (type) => {
+    setFollowersModalType(type);
+    setShowFollowersModal(true);
+  };
+
+  const startChat = (username) => {
+    if (username === currentUser) return;
+    
+    // Check if chat already exists
+    const existingChat = activeChats.find(chat => chat.username === username);
+    
+    if (!existingChat) {
+      // Create new chat
+      const newChat = {
+        id: Date.now(),
+        username: username,
+        lastMessage: '',
+        timestamp: new Date().toISOString(),
+        unread: 0
+      };
+      setActiveChats(prev => [newChat, ...prev]);
+    }
+    
+    // Open chat panel and select this chat
+    setSelectedChat(username);
+    setShowChat(true);
+    setShowNotifications(false);
+    setShowProfileView(false);
+    setShowFollowersModal(false);
+  };
+
+  const sendMessage = () => {
+    if (!messageInput.trim() || !selectedChat) return;
+
+    const newMessage = {
+      id: Date.now(),
+      sender: currentUser,
+      text: messageInput,
+      timestamp: new Date().toISOString()
+    };
+
+    // Add message to chat
+    setChatMessages(prev => ({
+      ...prev,
+      [selectedChat]: [...(prev[selectedChat] || []), newMessage]
+    }));
+
+    // Update last message in chat list
+    setActiveChats(prev => prev.map(chat => 
+      chat.username === selectedChat 
+        ? { ...chat, lastMessage: messageInput, timestamp: new Date().toISOString() }
+        : chat
+    ));
+
+    setMessageInput('');
+  };
+
 
   return (
     <div className={`app ${isDarkMode ? 'dark-mode' : 'light-mode'}`}>
@@ -545,21 +682,248 @@ function App() {
       )}
 
       {showChat && (
-        <div className="chat-panel">
-          <div className="chat-header">
-            <h2>Messages</h2>
-            <button className="close-panel" onClick={() => setShowChat(false)}>
-              ×
+  <div className="chat-panel">
+    <div className="chat-header">
+      <h2>Messages</h2>
+      <button
+        className="close-panel"
+        onClick={() => {
+          setShowChat(false);
+          setSelectedChat(null);
+        }}
+      >
+        ×
+      </button>
+    </div>
+
+    <div className="chat-content">
+      {selectedChat ? (
+        <div className="chat-conversation">
+          <div className="chat-conversation-header">
+            <button className="back-btn" onClick={() => setSelectedChat(null)}>
+              ←
+            </button>
+
+            <div className="chat-user-info">
+              <div className="chat-user-avatar">
+                <img
+                  src={userProfiles[selectedChat]?.image || '/character profile pics/Ada profile.png'}
+                  alt={selectedChat}
+                />
+              </div>
+
+              <div>
+                <div className="chat-username">{selectedChat}</div>
+                <div className="chat-user-title">
+                  {userProfiles[selectedChat]?.title || 'User'}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="messages-container">
+            {chatMessages[selectedChat] && chatMessages[selectedChat].length > 0 ? (
+              chatMessages[selectedChat].map((msg) => (
+                <div
+                  key={msg.id}
+                  className={`message-item ${
+                    msg.sender === currentUser ? 'sent' : 'received'
+                  }`}
+                >
+                  <div className="message-bubble">
+                    <p>{msg.text}</p>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <div className="empty-conversation">
+                <MessageCircle size={48} />
+                <p>Start the conversation with {selectedChat}</p>
+              </div>
+            )}
+          </div>
+
+          <div className="message-input-area">
+            <input
+              type="text"
+              placeholder="Type a message..."
+              value={messageInput}
+              onChange={(e) => setMessageInput(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' && messageInput.trim()) {
+                  sendMessage();
+                }
+              }}
+              className="message-input"
+            />
+
+            <button
+              className="send-message-btn"
+              onClick={sendMessage}
+              disabled={!messageInput.trim()}
+            >
+              Send
             </button>
           </div>
-          <div className="chat-list">
+        </div>
+      ) : (
+        <div className="chat-list">
+          {activeChats.length > 0 ? (
+            activeChats.map((chat) => (
+              <div
+                key={chat.id}
+                className="chat-list-item"
+                onClick={() => setSelectedChat(chat.username)}
+              >
+                <div className="chat-item-avatar">
+                  <img
+                    src={userProfiles[chat.username]?.image || '/character profile pics/Ada profile.png'}
+                    alt={chat.username}
+                  />
+                </div>
+
+                <div className="chat-item-content">
+                  <div className="chat-item-header">
+                    <span className="chat-item-username">{chat.username}</span>
+                    {chat.unread > 0 && <span className="unread-badge">{chat.unread}</span>}
+                  </div>
+
+                  <p className="chat-item-preview">
+                    {chat.lastMessage || 'Start a conversation'}
+                  </p>
+                </div>
+              </div>
+            ))
+          ) : (
             <div className="empty-chat">
               <MessageCircle size={48} />
               <p>No messages yet</p>
+              <span className="empty-chat-hint">
+                Click the message button on a user's profile to start chatting
+              </span>
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  </div>
+)}
+
+          
+
+      {showFollowersModal && (
+  <div className="followers-modal-overlay" onClick={() => setShowFollowersModal(false)}>
+    <div className="followers-modal" onClick={(e) => e.stopPropagation()}>
+      <div className="followers-modal-header">
+        <h2>{followersModalType === 'followers' ? 'Followers' : 'Following'}</h2>
+        <button className="close-panel" onClick={() => setShowFollowersModal(false)}>
+          ×
+        </button>
+      </div>
+
+      <div className="followers-list">
+        {(followersModalType === 'followers' ? getFollowersList() : getFollowingList()).length > 0 ? (
+          (followersModalType === 'followers' ? getFollowersList() : getFollowingList()).map((username) => (
+            <div key={username} className="follower-item">
+              <div
+                className="follower-info"
+                onClick={() => {
+                  openUserProfile(username);
+                  setShowFollowersModal(false);
+                }}
+              >
+                <div className="follower-avatar">
+                  <img
+                    src={userProfiles[username]?.image || '/character profile pics/Ada profile.png'}
+                    alt={username}
+                  />
+                </div>
+                <div className="follower-details">
+                  <span className="follower-username">{username}</span>
+                  <span className="follower-title">{userProfiles[username]?.title || 'User'}</span>
+                </div>
+              </div>
+
+              {username !== currentUser && (
+                <div className="follower-actions">
+                  <button
+                    className="message-btn-small"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      startChat(username);
+                    }}
+                  >
+                    <MessageCircle size={16} />
+                  </button>
+
+                  <button
+                    className={`follow-btn-small ${followedUsers.includes(username) ? 'following' : ''}`}
+                    onClick={() => toggleFollowUser(username)}
+                  >
+                    {followedUsers.includes(username) ? 'Following' : 'Follow'}
+                  </button>
+                </div>
+              )}
+            </div>
+          ))
+        ) : (
+          <div className="empty-followers">
+            <User size={48} />
+            <p>No {followersModalType === 'followers' ? 'followers' : 'following'} yet</p>
+          </div>
+        )}
+      </div>
+    </div>
+  </div>
+)}
+
+
+
+      {showEditProfile && (
+        <div className="followers-modal-overlay" onClick={() => setShowEditProfile(false)}>
+          <div className="edit-profile-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="followers-modal-header">
+              <h2>Edit Profile</h2>
+              <button className="close-panel" onClick={() => setShowEditProfile(false)}>
+                ×
+              </button>
+            </div>
+            <div className="edit-profile-content">
+              <div className="edit-field">
+                <label className="edit-label">Bio</label>
+                <textarea
+                  className="edit-bio-textarea"
+                  placeholder="Tell us about yourself..."
+                  value={editBioText}
+                  onChange={(e) => setEditBioText(e.target.value)}
+                  maxLength={150}
+                />
+                <span className="char-count">{editBioText.length}/150</span>
+              </div>
+            </div>
+            <div className="edit-profile-footer">
+              <button 
+                className="cancel-btn"
+                onClick={() => setShowEditProfile(false)}
+              >
+                Cancel
+              </button>
+              <button 
+                className="save-btn"
+                onClick={() => {
+                  setUserBios(prev => ({
+                    ...prev,
+                    [currentUser]: editBioText
+                  }));
+                  setShowEditProfile(false);
+                }}
+              >
+                Save Changes
+              </button>
             </div>
           </div>
         </div>
-      )}
+      )}            
 
       <div className="main-layout">
         {!showProfileView && (
@@ -689,31 +1053,55 @@ function App() {
                       <span className="profile-title-badge-large">{userProfiles[viewingUser]?.title || 'The Innovator'}</span>
                     </div>
                     <p className="profile-level">Level 1</p>
+                    {userBios[viewingUser] && (
+                    <p className="profile-bio">{userBios[viewingUser]}</p>
+                  )}
                     <div className="profile-meta">
                       <span className="profile-meta-item">
                         <User size={16} />
                         Joined Jan 2026
                       </span>
-                      <span className="profile-meta-item">
+                      <span 
+                        className="profile-meta-item clickable-meta"
+                        onClick={() => openFollowersModal('followers')}
+                      >
                         <span className="meta-count">{profileStats.followers}</span> Followers
                       </span>
-                      <span className="profile-meta-item">
-                        <span className="meta-count">{profileStats.following}</span> Followings
+                      <span 
+                        className="profile-meta-item clickable-meta"
+                        onClick={() => openFollowersModal('following')}
+                      >
+                        <span className="meta-count">{profileStats.following}</span> Following
                       </span>
                     </div>
                   </div>
                   {isOwnProfile ? (
-                    <button className="edit-profile-btn">
+                    <button 
+                      className="edit-profile-btn"
+                      onClick={() => {
+                        setEditBioText(userBios[currentUser] || '');
+                        setShowEditProfile(true);
+                      }}
+                    >
                       <Settings size={18} />
                       Edit profile
                     </button>
                   ) : (
-                    <button
-                      className="edit-profile-btn"
-                      onClick={() => toggleFollowUser(viewingUser)}
-                    >
-                      {isFollowing ? 'Following' : 'Follow'}
-                    </button>
+                    <div className="profile-action-buttons">
+                      <button
+                        className="message-profile-btn"
+                        onClick={() => startChat(viewingUser)}
+                      >
+                        <MessageCircle size={18} />
+                        Message
+                      </button>
+                      <button
+                        className="edit-profile-btn"
+                        onClick={() => toggleFollowUser(viewingUser)}
+                      >
+                        {isFollowing ? 'Following' : 'Follow'}
+                      </button>
+                    </div>
                   )}
                 </div>
               </div>
