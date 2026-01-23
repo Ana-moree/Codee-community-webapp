@@ -5,6 +5,7 @@ import {
   CheckCircle, Settings, LogOut, Moon, Sun
 } from 'lucide-react';
 import './App.css';
+import About from './About';  // ← ADD THIS LINE
 
 function App() {
   const [activeTab, setActiveTab] = useState('top');
@@ -34,6 +35,7 @@ function App() {
   const [chatMessages, setChatMessages] = useState({});
   const [messageInput, setMessageInput] = useState('');
   const [viewingUser, setViewingUser] = useState(currentUser);
+  const [showAbout, setShowAbout] = useState(false);  // ← ADD THIS LINE
   const [followedUsers, setFollowedUsers] = useState(['@emmacodes', '@alexdev']);
   const [showFollowersModal, setShowFollowersModal] = useState(false);
   const [followersModalType, setFollowersModalType] = useState('followers');
@@ -92,14 +94,6 @@ function App() {
   '@priyalearns': {
     image: '/character profile pics/Linus profile.png',
     title: 'The Open Architect'
-  },
-  '@memeLord': {
-    image: '/character profile pics/Ada profile.png',
-    title: 'The Jester'
-  },
-  '@webWizard': {
-    image: '/character profile pics/Grace profile.png',
-    title: 'The Frontend Master'
   },
   '@CODEE System': {
     image: '/Codee Icon.png',
@@ -343,32 +337,6 @@ function App() {
       isPinned: false,
       isAdmin: true
     },
-    {
-      id: 7,
-      username: '@memeLord',
-      title: 'The Jester',
-      timeAgo: '3h',
-      category: 'memes',
-      content: 'When you finally fix a bug after 3 hours and realize it was just a missing semicolon 😂💀 #DevLife #CodingMemes',
-      likes: 523,
-      comments: 67,
-      isPinned: false,
-      isAdmin: false,
-      type: 'post'
-    },
-    {
-      id: 8,
-      username: '@webWizard',
-      title: 'The Frontend Master',
-      timeAgo: '6h',
-      category: 'html',
-      content: 'Just launched my first responsive website using HTML5, CSS3, and vanilla JavaScript! No frameworks, just pure web fundamentals. Check it out and let me know what you think!',
-      likes: 234,
-      comments: 45,
-      isPinned: false,
-      isAdmin: false,
-      type: 'post'
-    }
   ];
 
   const news = [
@@ -544,7 +512,6 @@ function App() {
     setSelectedChat(username);
     setShowChat(true);
     setShowNotifications(false);
-    setShowProfileView(false);
     setShowFollowersModal(false);
   };
 
@@ -587,15 +554,30 @@ function App() {
               <span className="logo-text" style={{ cursor: 'pointer' }} onClick={() => {
                 setShowProfileView(false);
                 setShowLeaderboard(false);
+                setShowAbout(false);
               }}>CODEE</span>
             </div>
             <div className="nav-links">
-              <button className="nav-link">About</button>
-              <button className="nav-link active" onClick={() => {
-                setShowProfileView(false);
-                setShowLeaderboard(false);
-              }}>Community</button>
-              <button className="nav-link">Learn</button>
+              <button 
+                className={`nav-link ${showAbout ? 'active' : ''}`}
+                onClick={() => {
+                  setShowAbout(true);
+                  setShowProfileView(false);
+                  setShowLeaderboard(false);
+                }}
+              >
+                About
+              </button>
+              <button 
+                className={`nav-link ${!showAbout && !showProfileView && !showLeaderboard ? 'active' : ''}`}
+                onClick={() => {
+                  setShowAbout(false);
+                  setShowProfileView(false);
+                  setShowLeaderboard(false);
+                }}
+              >
+                Community
+              </button>
             </div>
           </div>
           <div className="nav-right">
@@ -628,7 +610,7 @@ function App() {
                   </button>
                   <button className="dropdown-item">
                     <Settings size={18} />
-                    <span>Account</span>
+                    <span>Settings</span>
                   </button>
                   <button className="dropdown-item" onClick={toggleTheme}>
                     {isDarkMode ? <Sun size={18} /> : <Moon size={18} />}
@@ -926,7 +908,7 @@ function App() {
       )}            
 
       <div className="main-layout">
-        {!showProfileView && (
+        {!showProfileView && !showAbout && (
           <aside className="left-sidebar">
             <div className="sidebar-section">
               {sidebarItems.map(item => {
@@ -982,7 +964,9 @@ function App() {
         )}
 
         <main className="main-content">
-          {showLeaderboard ? (
+          {showAbout ? (
+            <About />
+        ) : showLeaderboard ? (
             <div className="leaderboard-view">
               <div className="leaderboard-header">
                 <div className="leaderboard-header-content">
@@ -1471,7 +1455,7 @@ function App() {
           )}
         </main>
 
-        {!showProfileView && !showLeaderboard && (
+        {!showProfileView && !showLeaderboard && !showAbout && (
           <aside className="right-sidebar">
             <div className="profile-card">
               <div className="profile-header">
