@@ -13,6 +13,7 @@ function App() {
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [notifications] = useState(5);
   const [selectedSurveyOption, setSelectedSurveyOption] = useState(null);
+  const [surveySubmitted, setSurveySubmitted] = useState({});
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(true);
   const [showProfileView, setShowProfileView] = useState(false);
@@ -36,6 +37,19 @@ function App() {
   const [messageInput, setMessageInput] = useState('');
   const [viewingUser, setViewingUser] = useState(currentUser);
   const [showAbout, setShowAbout] = useState(false);  // ← ADD THIS LINE
+  const [showSettings, setShowSettings] = useState(false);
+  const [settingsTab, setSettingsTab] = useState('account');
+  const [userEmail, setUserEmail] = useState('ada@codee.com');
+  const [userPassword, setUserPassword] = useState('••••••••');
+  const [userName, setUserName] = useState('riaree');
+  const [editEmail, setEditEmail] = useState('');
+  const [editPassword, setEditPassword] = useState('');
+  const [editUsername, setEditUsername] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [passwordError, setPasswordError] = useState('');
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [showConfirmation, setShowConfirmation] = useState(false);
+  const [confirmationMessage, setConfirmationMessage] = useState('');
   const [followedUsers, setFollowedUsers] = useState(['@emmacodes', '@alexdev']);
   const [showFollowersModal, setShowFollowersModal] = useState(false);
   const [followersModalType, setFollowersModalType] = useState('followers');
@@ -109,6 +123,20 @@ function App() {
     setShowLeaderboard(false);
     setShowProfileMenu(false);
   };
+
+  const validatePasswords = () => {
+  if (editPassword && confirmPassword) {
+    if (editPassword !== confirmPassword) {
+      setPasswordError('Passwords do not match');
+      return false;
+    } else {
+      setPasswordError('');
+      return true;
+    }
+  }
+  setPasswordError('');
+  return editPassword === confirmPassword;
+};
 
   const toggleFollowUser = (username) => {
     if (!username || username === currentUser) return;
@@ -465,6 +493,16 @@ function App() {
     }
   };
 
+  const handleSurveySubmit = (postId) => {
+    if (selectedSurveyOption !== null) {
+      setSurveySubmitted(prev => ({
+        ...prev,
+        [postId]: selectedSurveyOption
+      }));
+      setSelectedSurveyOption(null);
+    }
+  };
+
   const getCommentCount = (postId, originalCount) => {
     return originalCount + (postComments[postId] || 0);
   };
@@ -555,6 +593,7 @@ function App() {
                 setShowProfileView(false);
                 setShowLeaderboard(false);
                 setShowAbout(false);
+                setShowSettings(false);
               }}>CODEE</span>
             </div>
             <div className="nav-links">
@@ -564,16 +603,18 @@ function App() {
                   setShowAbout(true);
                   setShowProfileView(false);
                   setShowLeaderboard(false);
+                  setShowSettings(false);
                 }}
               >
                 About
               </button>
               <button 
-                className={`nav-link ${!showAbout && !showProfileView && !showLeaderboard ? 'active' : ''}`}
+                className={`nav-link ${!showAbout && !showProfileView && !showLeaderboard && !showSettings ? 'active' : ''}`}
                 onClick={() => {
                   setShowAbout(false);
                   setShowProfileView(false);
                   setShowLeaderboard(false);
+                  setShowSettings(false);
                 }}
               >
                 Community
@@ -608,7 +649,13 @@ function App() {
                     <User size={18} />
                     <span>Profile</span>
                   </button>
-                  <button className="dropdown-item">
+                  <button className="dropdown-item" onClick={() => {
+                    setShowSettings(true);
+                    setShowProfileMenu(false);
+                    setShowProfileView(false);
+                    setShowLeaderboard(false);
+                    setShowAbout(false);
+                  }}>
                     <Settings size={18} />
                     <span>Settings</span>
                   </button>
@@ -905,10 +952,58 @@ function App() {
             </div>
           </div>
         </div>
-      )}            
+      )}
+
+      {showDeleteConfirm && (
+        <div className="followers-modal-overlay" onClick={() => setShowDeleteConfirm(false)}>
+          <div className="delete-confirm-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="delete-confirm-header">
+              <h2>Delete Account?</h2>
+            </div>
+            <div className="delete-confirm-content">
+              <p>Are you absolutely sure you want to delete your account?</p>
+              <p className="delete-confirm-warning">This will:</p>
+              <ul className="delete-confirm-list">
+                <li>Permanently delete all your posts and comments</li>
+                <li>Remove all your achievements and progress</li>
+                <li>Delete your profile and personal information</li>
+                <li>Remove you from all leaderboards</li>
+              </ul>
+              <p className="delete-confirm-final"><strong>This action cannot be undone.</strong></p>
+            </div>
+            <div className="delete-confirm-footer">
+              <button 
+                className="cancel-btn"
+                onClick={() => setShowDeleteConfirm(false)}
+              >
+                Cancel
+              </button>
+              <button 
+                className="confirm-delete-btn"
+                onClick={() => {
+                  // Handle account deletion
+                  alert('Account deleted');
+                  setShowDeleteConfirm(false);
+                }}
+              >
+                Delete My Account
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showConfirmation && (
+        <div className="confirmation-toast">
+          <div className="confirmation-content">
+            <div className="confirmation-icon">✓</div>
+            <span>{confirmationMessage}</span>
+          </div>
+        </div>
+      )}
 
       <div className="main-layout">
-        {!showProfileView && !showAbout && (
+        {!showProfileView && !showAbout && !showSettings && (
           <aside className="left-sidebar">
             <div className="sidebar-section">
               {sidebarItems.map(item => {
@@ -917,7 +1012,7 @@ function App() {
                   <button
                     key={item.id}
                     className={`sidebar-item ${
-                      (item.id === 'home' && !showLeaderboard && !showProfileView) ||
+                      (item.id === 'home' && !showLeaderboard && !showProfileView && !showSettings) ||
                       (item.id === 'leaderboards' && showLeaderboard)
                         ? 'active'
                         : ''
@@ -926,9 +1021,12 @@ function App() {
                       if (item.id === 'leaderboards') {
                         setShowLeaderboard(true);
                         setShowProfileView(false);
+                        setSelectedCategory('all');
                       } else {
                         setShowProfileView(false);
                         setShowLeaderboard(false);
+                        setShowSettings(false);
+                        setSelectedCategory('all');
                       }
                     }}
                   >
@@ -966,6 +1064,198 @@ function App() {
         <main className="main-content">
           {showAbout ? (
             <About />
+        ) : showSettings ? (
+            <div className="settings-view">
+              <div className="settings-header">
+                <div className="settings-header-content">
+                  <div className="settings-icon">
+                    <Settings size={32} />
+                  </div>
+                  <div className="settings-header-text">
+                    <h1>Settings</h1>
+                    <p>Manage your account preferences and security</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="settings-tabs-wrapper">
+                <div className="settings-tabs">
+                  <button
+                    onClick={() => setSettingsTab('account')}
+                    className={`settings-tab ${settingsTab === 'account' ? 'active' : ''}`}
+                  >
+                    Account
+                  </button>
+                  <button
+                    onClick={() => setSettingsTab('security')}
+                    className={`settings-tab ${settingsTab === 'security' ? 'active' : ''}`}
+                  >
+                    Security
+                  </button>
+                  <button
+                    onClick={() => setSettingsTab('danger')}
+                    className={`settings-tab ${settingsTab === 'danger' ? 'active' : ''}`}
+                  >
+                    Danger Zone
+                  </button>
+                </div>
+              </div>
+
+              <div className="settings-content">
+                {settingsTab === 'account' && (
+                  <div className="settings-section">
+                    <div className="settings-card">
+                      <div className="settings-card-header">
+                        <h3>Email Address</h3>
+                        <p>Your email address for account notifications</p>
+                      </div>
+                      <div className="settings-card-body">
+                        <div className="settings-field-group">
+                          <input
+                            type="email"
+                            className="settings-input"
+                            value={editEmail || userEmail}
+                            onChange={(e) => setEditEmail(e.target.value)}
+                            placeholder="Email address"
+                          />
+                          <button
+                            className="settings-save-btn"
+                            onClick={() => {
+                              if (editEmail && editEmail !== userEmail) {
+                                setUserEmail(editEmail);
+                                setEditEmail('');
+                                setConfirmationMessage('Email updated successfully!');
+                                setShowConfirmation(true);
+                                setTimeout(() => setShowConfirmation(false), 3000);
+                              }
+                            }}
+                            disabled={!editEmail || editEmail === userEmail}
+                          >
+                            Save
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="settings-card">
+                      <div className="settings-card-header">
+                        <h3>Username</h3>
+                        <p>Your unique username for the platform</p>
+                      </div>
+                      <div className="settings-card-body">
+                        <div className="settings-field-group">
+                          <input
+                            type="text"
+                            className="settings-input"
+                            value={editUsername || userName}
+                            onChange={(e) => setEditUsername(e.target.value)}
+                            placeholder="Username"
+                          />
+                          <button
+                            className="settings-save-btn"
+                            onClick={() => {
+                              if (editUsername && editUsername !== userName) {
+                                setUserName(editUsername);
+                                setEditUsername('');
+                                setConfirmationMessage('Username updated successfully!');
+                                setShowConfirmation(true);
+                                setTimeout(() => setShowConfirmation(false), 3000);
+                              }
+                            }}
+                            disabled={!editUsername || editUsername === userName}
+                          >
+                            Save
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {settingsTab === 'security' && (
+                  <div className="settings-section">
+                    <div className="settings-card">
+                      <div className="settings-card-header">
+                        <h3>Change Password</h3>
+                        <p>Update your password to keep your account secure</p>
+                      </div>
+                      <div className="settings-card-body">
+                        <div className="settings-field-group-vertical">
+                          <input
+                            type="password"
+                            className="settings-input"
+                            placeholder="Current password"
+                          />
+                          <input
+                            type="password"
+                            className="settings-input"
+                            value={editPassword}
+                            onChange={(e) => setEditPassword(e.target.value)}
+                            placeholder="New password"
+                          />
+                          <input
+                            type="password"
+                            className="settings-input"
+                            placeholder="Confirm new password"
+                            value={confirmPassword}
+                            onChange={(e) => {
+                              setConfirmPassword(e.target.value);
+                              setPasswordError('');
+                            }}
+                          />
+                          {passwordError && (
+                            <div className="password-error">
+                              {passwordError}
+                            </div>
+                          )}
+                          <button
+                            className="settings-save-btn-block"
+                            onClick={() => {
+                              if (validatePasswords() && editPassword) {
+                                setUserPassword('••••••••');
+                                setEditPassword('');
+                                setConfirmPassword('');
+                                setPasswordError('');
+                                setConfirmationMessage('Password updated successfully!');
+                                setShowConfirmation(true);
+                                setTimeout(() => setShowConfirmation(false), 3000);
+                              } else if (!validatePasswords()) {
+                                setPasswordError('Passwords do not match');
+                              }
+                            }}
+                            disabled={!editPassword || !confirmPassword}
+                          >
+                            Update Password
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {settingsTab === 'danger' && (
+                  <div className="settings-section">
+                    <div className="settings-card danger-card">
+                      <div className="settings-card-header">
+                        <h3>Delete Account</h3>
+                        <p>Permanently delete your account and all associated data</p>
+                      </div>
+                      <div className="settings-card-body">
+                        <div className="danger-warning">
+                          <p><strong>Warning:</strong> This action cannot be undone. All your data, posts, and progress will be permanently deleted.</p>
+                        </div>
+                        <button
+                          className="delete-account-btn"
+                          onClick={() => setShowDeleteConfirm(true)}
+                        >
+                          Delete My Account
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
         ) : showLeaderboard ? (
             <div className="leaderboard-view">
               <div className="leaderboard-header">
@@ -1312,16 +1602,28 @@ function App() {
                                 key={index}
                                 onClick={() => setSelectedSurveyOption(index)}
                                 className={`survey-option ${selectedSurveyOption === index ? 'selected' : ''}`}
+                                disabled={surveySubmitted[post.id] !== undefined}
                               >
                                 <span>{option}</span>
                                 {selectedSurveyOption === index && <CheckCircle size={20} />}
+                                {surveySubmitted[post.id] === index && <CheckCircle size={20} />}
                               </button>
                             ))}
                           </div>
 
-                          {selectedSurveyOption !== null && (
-                            <button className="submit-btn">Submit Response</button>
-                          )}
+                          {surveySubmitted[post.id] !== undefined ? (
+                            <div className="survey-submitted">
+                              <CheckCircle size={20} />
+                              <span>Response submitted! Thank you for participating.</span>
+                            </div>
+                          ) : selectedSurveyOption !== null ? (
+                            <button 
+                              className="submit-btn"
+                              onClick={() => handleSurveySubmit(post.id)}
+                            >
+                              Submit Response
+                            </button>
+                          ) : null}
 
                           <div className="survey-stats">
                             <div className="stat-item">
@@ -1455,8 +1757,8 @@ function App() {
           )}
         </main>
 
-        {!showProfileView && !showLeaderboard && !showAbout && (
-          <aside className="right-sidebar">
+        {!showProfileView && !showLeaderboard && !showAbout && !showSettings && (
+            <aside className="right-sidebar">
             <div className="profile-card">
               <div className="profile-header">
                 <div className="profile-avatar">
