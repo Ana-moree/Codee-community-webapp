@@ -5,7 +5,8 @@ import {
   CheckCircle, Settings, LogOut, Moon, Sun
 } from 'lucide-react';
 import './App.css';
-import About from './About';  // ← ADD THIS LINE
+import About from './About';  
+import Login from './Login';  
 
 function App() {
   const [activeTab, setActiveTab] = useState('top');
@@ -23,6 +24,7 @@ function App() {
   const [likedPosts, setLikedPosts] = useState([]);
   const [savedPosts, setSavedPosts] = useState([]);
   const [expandedPost, setExpandedPost] = useState(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);  
   const [commentText, setCommentText] = useState('');
   const [postComments, setPostComments] = useState({});
   const [comments, setComments] = useState({});
@@ -36,7 +38,7 @@ function App() {
   const [chatMessages, setChatMessages] = useState({});
   const [messageInput, setMessageInput] = useState('');
   const [viewingUser, setViewingUser] = useState(currentUser);
-  const [showAbout, setShowAbout] = useState(false);  // ← ADD THIS LINE
+  const [showAbout, setShowAbout] = useState(false); 
   const [showSettings, setShowSettings] = useState(false);
   const [settingsTab, setSettingsTab] = useState('account');
   const [userEmail, setUserEmail] = useState('ada@codee.com');
@@ -581,21 +583,25 @@ function App() {
 
 
   return (
-    <div className={`app ${isDarkMode ? 'dark-mode' : 'light-mode'}`}>
-      <nav className="top-nav">
-        <div className="nav-container">
-          <div className="nav-left">
-            <div className="logo">
-              <div className="logo-icon">
-                <img src="/Codee Icon.png" alt="Logo" />
-              </div>
-              <span className="logo-text" style={{ cursor: 'pointer' }} onClick={() => {
-                setShowProfileView(false);
-                setShowLeaderboard(false);
-                setShowAbout(false);
-                setShowSettings(false);
-              }}>CODEE</span>
-            </div>
+    <>
+      {!isLoggedIn ? (
+        <Login onLoginSuccess={() => setIsLoggedIn(true)} />
+      ) : (
+        <div className={`app ${isDarkMode ? 'dark-mode' : 'light-mode'}`}>
+          <nav className="top-nav">
+            <div className="nav-container">
+              <div className="nav-left">
+                <div className="logo">
+                  <div className="logo-icon">
+                    <img src="/Codee Icon.png" alt="Logo" />
+                  </div>
+                  <span className="logo-text" style={{ cursor: 'pointer' }} onClick={() => {
+                    setShowProfileView(false);
+                    setShowLeaderboard(false);
+                    setShowAbout(false);
+                    setShowSettings(false);
+                  }}>CODEE</span>
+                </div>
             <div className="nav-links">
               <button 
                 className={`nav-link ${showAbout ? 'active' : ''}`}
@@ -1843,8 +1849,10 @@ function App() {
           </aside>
         )}
       </div>
-    </div>
-  );
+          </div>
+    )}
+  </>
+);
 }
 
 export default App;
