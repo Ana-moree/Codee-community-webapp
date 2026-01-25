@@ -1,4 +1,5 @@
 import React from 'react';
+import './About.css';  
 
 function About() {
   return (
@@ -58,31 +59,57 @@ function About() {
           </div>
         </section>
 
+        {/* --- LEARNING THROUGH PLAY BENTO --- */}
         <section className="about-section">
           <h2>Learning Through Play</h2>
-          <p>
+          <p className="section-intro">
             Codee isn't just a game—it's a complete learning ecosystem built on the principle that 
             the best way to learn is by doing, exploring, and having fun along the way.
           </p>
           
-          <h3>Game Features:</h3>
-          <ul className="feature-list">
-            <li>Story-driven levels with unique narratives for each learning path</li>
-            <li>Interactive coding challenges that teach real-world skills</li>
-            <li>Boss battles and special levels that unlock achievements</li>
-            <li>XP progression, ranks, and unlockable titles</li>
-            <li>Avatar customization to express your journey</li>
-            <li>Leaderboards to see how you stack up with fellow coders</li>
-          </ul>
+          <div className="bento-grid">
+            <div className="bento-card card-wide">
+              <div className="bento-icon">⚡</div>
+              <h3>Immersive Learning Adventure</h3>
+              <p>
+                Codee isn't just a lesson—it's a journey. We combine story-driven quests with 
+                real-world programming challenges, allowing you to instantly translate code 
+                into in-game actions and narrative progress.
+              </p>
+            </div>
 
-          <h3>Safe Community Features:</h3>
-          <ul className="feature-list">
-            <li>Anonymous profiles protecting your privacy</li>
-            <li>Moderated forums organized by topic (General, Achievements, Help, Python, HTML)</li>
-            <li>Share your progress, ask questions, and celebrate wins</li>
-            <li>Friend system to connect with other learners</li>
-            <li>Child-safe design with no private messaging or personal data exposure</li>
-          </ul>
+            <div className="bento-card card-tall">
+              <div className="bento-icon">🛠️</div>
+              <h3>The Gamification Core</h3>
+              <ul className="bento-list">
+                <li>Interactive Boss Battles</li>
+                <li>XP & Global Ranking System</li>
+                <li>Unlockable Titles & Badges</li>
+                <li>Character Customization</li>
+                <li>Competitive Leaderboards</li>
+                <li>Real-time Progress Tracking</li>
+                <li>Daily Streak Rewards</li>
+              </ul>
+            </div>
+
+            <div className="bento-card card-square">
+              <div className="bento-icon">👥</div>
+              <h3>Safe Community</h3>
+              <p>
+                Share progress, ask questions, and celebrate wins in a moderated environment 
+                designed specifically for student safety.
+              </p>
+            </div>
+
+            <div className="bento-card card-square">
+              <div className="bento-icon">🛡️</div>
+              <h3>Privacy First</h3>
+              <p>
+                Built with digital safety in mind. Anonymous profiles and strict data protection 
+                ensure a worry-free experience for parents.
+              </p>
+            </div>
+          </div>
         </section>
 
         <section className="about-section">
@@ -127,48 +154,61 @@ function About() {
           </div>
         </section>
 
+        {/* --- NEW CODEFEST BENTO SECTION --- */}
         <section className="about-section codefest-section">
           <h2>About CodeFest Network</h2>
-          <p>
-            Codee is proudly part of the <strong>CodeFest Network</strong>, a global movement dedicated 
-            to empowering the next generation of tech innovators through hands-on learning, community 
-            building, and competitive programming opportunities.
+          <p className="section-intro">
+             Empowering the next generation of tech innovators through hands-on learning and global opportunities.
           </p>
 
-          <h3>The CodeFest Mission</h3>
-          <p>
-            CodeFest Network exists to democratize tech education and create pathways for young minds 
-            to discover, develop, and deploy their potential in computer science and technology. Through 
-            hackathons, bootcamps, educational programs, and now Codee, we're building a world where 
-            every student has the opportunity to become a creator, problem-solver, and innovator.
-          </p>
+          <div className="bento-grid">
+            {/* 1. Wide Card: Mission & Intro */}
+            <div className="bento-card card-wide">
+              <div className="bento-icon">🌍</div>
+              <h3>The Global Mission</h3>
+              <p style={{marginBottom: '16px'}}>
+                Codee is proudly part of the <strong>CodeFest Network</strong>. We exist to democratize tech education and create pathways for young minds to discover, develop, and deploy their potential.
+              </p>
+              <p>
+                Through hackathons, bootcamps, and educational programs, we're building a world where every student has the opportunity to become a creator, problem-solver, and innovator.
+              </p>
+            </div>
 
-          <h3>From Bootcamp to Hackathon: Your Journey Continues</h3>
-          <p>Codee is your starting point, but the CodeFest Network offers much more:</p>
-          <p><strong>After Codee, you can:</strong></p>
-          <ul className="feature-list">
-            <li>Join CodeFest hackathons and work in teams to solve real-world challenges</li>
-            <li>Compete for prizes while building your portfolio</li>
-            <li>Connect with mentors and industry professionals</li>
-            <li>Participate in bootcamps that deepen your skills</li>
-            <li>Become part of a global community of young innovators</li>
-          </ul>
-          <p>
-            Whether you're just beginning your coding journey in Codee or you're ready to compete in 
-            your first hackathon, CodeFest Network provides the support, community, and opportunities 
-            you need to thrive.
-          </p>
+            {/* 2. Tall Card: Journey List */}
+            <div className="bento-card card-tall">
+              <div className="bento-icon">🚀</div>
+              <h3>Your Journey Continues</h3>
+              <p style={{marginBottom: '20px', fontSize: '14px', color: '#9ca3af'}}>
+                Codee is just the start. After mastering the basics, you can:
+              </p>
+              <ul className="bento-list check-list">
+                <li>Join CodeFest Hackathons</li>
+                <li>Solve Real-World Challenges</li>
+                <li>Compete for Global Prizes</li>
+                <li>Connect with Mentors</li>
+                <li>Deepen Skills in Bootcamps</li>
+                <li>Join a Network of Innovators</li>
+              </ul>
+            </div>
 
-          <h3>Building the Future, Together</h3>
-          <p>At CodeFest Network, we believe that technology should be accessible to everyone. We're committed to:</p>
-          <ul className="feature-list">
-            <li>Creating safe, inclusive learning environments</li>
-            <li>Fostering creativity and innovation</li>
-            <li>Supporting students regardless of background or experience</li>
-            <li>Preparing the next generation for careers that don't yet exist</li>
-            <li>Making STEM education exciting, relevant, and achievable</li>
-          </ul>
+            {/* 3. Wide Card: Future List (Split Layout) */}
+            <div className="bento-card card-wide">
+              <div className="bento-icon">🤝</div>
+              <h3>Building the Future, Together</h3>
+              <p style={{marginBottom: '20px'}}>
+                At CodeFest Network, we believe technology should be accessible to everyone. We are committed to:
+              </p>
+              <ul className="bento-list check-list two-col-list">
+                <li>Creating inclusive environments</li>
+                <li>Fostering creativity & innovation</li>
+                <li>Supporting all students</li>
+                <li>Preparing for future careers</li>
+                <li>Making STEM exciting & achievable</li>
+              </ul>
+            </div>
+          </div>
         </section>
+        {/* --- END CODEFEST BENTO SECTION --- */}
 
         <section className="about-section cta-section">
           <h2>Join the Adventure</h2>

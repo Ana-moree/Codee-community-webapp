@@ -383,29 +383,29 @@ function App() {
   ];
 
   const weeklyLeaderboard = [
-    { rank: 1, username: 'tseslavnyjor6235', handle: '@lundao', xp: 4175, badge: '🏆' },
-    { rank: 2, username: 'Godwin Gerald', handle: '@Roentgenium-111', xp: 2715, badge: '🛡️' },
-    { rank: 3, username: 'Shubh Ramgarhia', handle: '@shubhramgarhia', xp: 1715, badge: '🛡️' },
-    { rank: 4, username: 'Manjaro', handle: '@Manjaro', xp: 1565, badge: '🛡️' },
-    { rank: 5, username: 'Almond', handle: '@almond07', xp: 1370, badge: '🛡️' },
-    { rank: 6, username: 'Pedro undefined', handle: '@sunspe', xp: 1355, badge: '🛡️' },
-    { rank: 7, username: 'Ricardo Puma', handle: '@ricrido', xp: 1355, badge: '🛡️' },
-    { rank: 8, username: 'AleScript', handle: '@AleScript', xp: 1330, badge: '🛡️' },
-    { rank: 9, username: 'Taylor', handle: '@whitezom', xp: 1155, badge: '🛡️' },
-    { rank: 10, username: 'ling9064721', handle: '@ling9064721', xp: 1135, badge: '🛡️' }
+    { rank: 1, username: 'tseslavnyjor6235', handle: '@lundao', xp: 4175, badge: '🏆', image: '/character profile pics/Ada profile.png' },
+    { rank: 2, username: 'Godwin Gerald', handle: '@Roentgenium-111', xp: 2715, badge: '🛡️', image: '/character profile pics/Alan profile.png' },
+    { rank: 3, username: 'Shubh Ramgarhia', handle: '@shubhramgarhia', xp: 1715, badge: '🛡️', image: '/character profile pics/Grace profile.png' },
+    { rank: 4, username: 'Manjaro', handle: '@Manjaro', xp: 1565, badge: '🛡️', image: '/character profile pics/Mark profile.png' },
+    { rank: 5, username: 'Almond', handle: '@almond07', xp: 1370, badge: '🛡️', image: '/character profile pics/Linus profile.png' },
+    { rank: 6, username: 'Pedro undefined', handle: '@sunspe', xp: 1355, badge: '🛡️', image: '/character profile pics/Ada profile.png' },
+    { rank: 7, username: 'Ricardo Puma', handle: '@ricrido', xp: 1355, badge: '🛡️', image: '/character profile pics/Alan profile.png' },
+    { rank: 8, username: 'AleScript', handle: '@AleScript', xp: 1330, badge: '🛡️', image: '/character profile pics/Grace profile.png' },
+    { rank: 9, username: 'Taylor', handle: '@whitezom', xp: 1155, badge: '🛡️', image: '/character profile pics/Mark profile.png' },
+    { rank: 10, username: 'ling9064721', handle: '@ling9064721', xp: 1135, badge: '🛡️', image: '/character profile pics/Linus profile.png' }
   ];
 
   const allTimeLeaderboard = [
-    { rank: 1, username: 'CodeMaster3000', handle: '@codemaster', xp: 45820, badge: '👑' },
-    { rank: 2, username: 'tseslavnyjor6235', handle: '@lundao', xp: 38945, badge: '🏆' },
-    { rank: 3, username: 'DevNinja', handle: '@devninja', xp: 35670, badge: '🛡️' },
-    { rank: 4, username: 'Godwin Gerald', handle: '@Roentgenium-111', xp: 32480, badge: '🛡️' },
-    { rank: 5, username: 'PythonPro', handle: '@pythonpro', xp: 29150, badge: '🛡️' },
-    { rank: 6, username: 'Shubh Ramgarhia', handle: '@shubhramgarhia', xp: 27340, badge: '🛡️' },
-    { rank: 7, username: 'WebWizard', handle: '@webwizard', xp: 25780, badge: '🛡️' },
-    { rank: 8, username: 'Manjaro', handle: '@Manjaro', xp: 24210, badge: '🛡️' },
-    { rank: 9, username: 'JSGuru', handle: '@jsguru', xp: 22950, badge: '🛡️' },
-    { rank: 10, username: 'Almond', handle: '@almond07', xp: 21430, badge: '🛡️' }
+    { rank: 1, username: 'CodeMaster3000', handle: '@codemaster', xp: 45820, badge: '👑', image: '/character profile pics/Ada profile.png' },
+    { rank: 2, username: 'tseslavnyjor6235', handle: '@lundao', xp: 38945, badge: '🏆', image: '/character profile pics/Alan profile.png' },
+    { rank: 3, username: 'DevNinja', handle: '@devninja', xp: 35670, badge: '🛡️', image: '/character profile pics/Grace profile.png' },
+    { rank: 4, username: 'Godwin Gerald', handle: '@Roentgenium-111', xp: 32480, badge: '🛡️', image: '/character profile pics/Mark profile.png' },
+    { rank: 5, username: 'PythonPro', handle: '@pythonpro', xp: 29150, badge: '🛡️', image: '/character profile pics/Linus profile.png' },
+    { rank: 6, username: 'Shubh Ramgarhia', handle: '@shubhramgarhia', xp: 27340, badge: '🛡️', image: '/character profile pics/Ada profile.png' },
+    { rank: 7, username: 'WebWizard', handle: '@webwizard', xp: 25780, badge: '🛡️', image: '/character profile pics/Alan profile.png' },
+    { rank: 8, username: 'Manjaro', handle: '@Manjaro', xp: 24210, badge: '🛡️', image: '/character profile pics/Grace profile.png' },
+    { rank: 9, username: 'JSGuru', handle: '@jsguru', xp: 22950, badge: '🛡️', image: '/character profile pics/Mark profile.png' },
+    { rank: 10, username: 'Almond', handle: '@almond07', xp: 21430, badge: '🛡️', image: '/character profile pics/Linus profile.png' }
   ];
 
   const filteredPosts = [...userPosts, ...posts].filter(post => {
@@ -628,8 +628,7 @@ function App() {
               </button>
             </div>
           </div>
-          <div className="nav-right">
-            <button 
+          <button 
               className="hamburger-btn"
               onClick={() => setShowMobileMenu(!showMobileMenu)}
             >
@@ -639,7 +638,8 @@ function App() {
                 <span></span>
               </div>
             </button>
-            
+
+          <div className="nav-right">
             <button className="icon-btn" onClick={() => {
               setShowChat(!showChat);
               setShowNotifications(false);
@@ -663,7 +663,11 @@ function App() {
 
               {showProfileMenu && (
                 <div className="profile-dropdown">
-                  <button className="dropdown-item" onClick={() => openUserProfile(currentUser)}>
+                  <button className="dropdown-item" onClick={() => {
+                    openUserProfile(currentUser);
+                    setShowSettings(false);
+                    setShowAbout(false);
+                  }}>
                     <User size={18} />
                     <span>Profile</span>
                   </button>
@@ -1030,14 +1034,36 @@ function App() {
         )}
 
         {/* Mobile/Desktop sidebar */}
-        {!showProfileView && !showAbout && !showSettings && (
           <aside className={`left-sidebar ${showMobileMenu ? 'mobile-open' : ''}`}>
-            <button 
-              className="close-mobile-menu"
-              onClick={() => setShowMobileMenu(false)}
-            >
-              ×
-            </button>
+            <div className="mobile-nav-section">
+              <button 
+                className={`sidebar-item ${showAbout ? 'active' : ''}`}
+                onClick={() => {
+                  setShowAbout(true);
+                  setShowProfileView(false);
+                  setShowLeaderboard(false);
+                  setShowSettings(false);
+                  setShowMobileMenu(false);
+                }}
+              >
+                <User size={20} />
+                <span>About</span>
+              </button>
+              <button 
+                className={`sidebar-item ${!showAbout && !showProfileView && !showLeaderboard && !showSettings ? 'active' : ''}`}
+                onClick={() => {
+                  setShowAbout(false);
+                  setShowProfileView(false);
+                  setShowLeaderboard(false);
+                  setShowSettings(false);
+                  setShowMobileMenu(false);
+                }}
+              >
+                <Home size={20} />
+                <span>Community</span>
+              </button>
+            </div>
+
             <div className="sidebar-section">
               {sidebarItems.map(item => {
                 const Icon = item.icon;
@@ -1070,13 +1096,20 @@ function App() {
               })}
             </div>
 
-            <div className="channels-section">
+           <div className="channels-section">
               <h3 className="channels-title">Channels</h3>
               <div className="channels-list">
                 {channels.map(channel => (
                   <button
                     key={channel.id}
                     onClick={() => {
+                      // Navigate to home view and set the selected category
+                      setShowLeaderboard(false);
+                      setShowProfileView(false);
+                      setShowSettings(false);
+                      setShowAbout(false);
+                      setShowMobileMenu(false);
+                      
                       if (selectedCategory === channel.id) {
                         setSelectedCategory('all');
                       } else {
@@ -1092,7 +1125,6 @@ function App() {
               </div>
             </div>
           </aside>
-        )}
 
         <main className="main-content">
           {showAbout ? (
@@ -1293,7 +1325,9 @@ function App() {
             <div className="leaderboard-view">
               <div className="leaderboard-header">
                 <div className="leaderboard-header-content">
-                  <div className="leaderboard-icon">🏆</div>
+                  <div className="leaderboard-icon">
+                    <img src="/Leaderboard.png" alt="Leaderboard" />
+                  </div>
                   <div className="leaderboard-header-text">
                     <h1>Leaderboards</h1>
                     <p>Compete with other users and rise to the top ٩(｡•́‿•̀｡)۶</p>
@@ -1325,7 +1359,7 @@ function App() {
                       <div className="leaderboard-rank">{user.rank}</div>
                       <div className="leaderboard-user">
                         <div className="user-avatar">
-                          {user.username.charAt(0).toUpperCase()}
+                          <img src={user.image} alt={user.username} />
                         </div>
                         <div className="user-info">
                           <div className="user-name">
@@ -1467,7 +1501,6 @@ function App() {
                       <Trophy size={48} />
                       <h3>No achievements yet</h3>
                       <p>Complete courses and challenges to earn your first achievement!</p>
-                      <button className="explore-btn">Explore Courses</button>
                     </div>
                   </div>
                 )}
