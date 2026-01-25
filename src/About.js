@@ -1,313 +1,202 @@
-import React, { useState } from 'react';
-import {
-  Smartphone, Users, Shield, Globe, Brain,
-  Heart, ChevronRight, Download, Lock,
-  Gamepad2
-} from 'lucide-react';
-import './About.css';
+import React from 'react';
 
 function About() {
-  const [activeFeature, setActiveFeature] = useState(null);
-
-  const characters = [
-  {
-    name: 'Ada',
-    title: 'The Innovator',
-    color: '#FF6B9D',
-    image: '/character profile pics/Ada profile.png'
-  },
-  {
-    name: 'Alan',
-    title: 'The Codebreaker',
-    color: '#4ECDC4',
-    image: '/character profile pics/Alan profile.png'
-  },
-  {
-    name: 'Grace',
-    title: 'The Debugger',
-    color: '#95E1D3',
-    image: '/character profile pics/Grace profile.png'
-  },
-  {
-    name: 'Linus',
-    title: 'The Open Architect',
-    color: '#F38181',
-    image: '/character profile pics/Linus profile.png'
-  },
-  {
-    name: 'Mark',
-    title: 'The Networker',
-    color: '#AA96DA',
-    image: '/character profile pics/Mark profile.png'
-  }
-];
-
-
-  const features = [
-    {
-      icon: Gamepad2,
-      title: 'Play & Learn',
-      description: 'Download the mobile game to start your coding adventure',
-      details: 'Choose between HTML (Web Development) or Python (AI/ML) paths and progress through story-driven levels'
-    },
-    {
-      icon: Users,
-      title: 'Connect',
-      description: 'Join the community website to share and learn together',
-      details: 'Post achievements, ask questions, and connect with fellow coders in a safe environment'
-    },
-    {
-      icon: Shield,
-      title: 'Stay Safe',
-      description: 'Anonymous profiles protect your identity',
-      details: 'No personal data, real names, or photos required. Children can learn safely'
-    }
-  ];
-
-  const learningPaths = [
-    {
-      path: 'Web Development',
-      language: 'HTML',
-      icon: Globe,
-      type: 'html',
-      skills: ['Build websites', 'Structure content', 'Create forms', 'Design layouts']
-    },
-    {
-      path: 'AI / Machine Learning',
-      language: 'Python',
-      icon: Brain,
-      type: 'python',
-      skills: ['Logic & variables', 'Loops & functions', 'Data analysis', 'Problem solving']
-    }
-  ];
-
-  const safetyFeatures = [
-    { icon: Lock, text: 'No personal data required' },
-    { icon: Users, text: 'Anonymous usernames only' },
-    { icon: Shield, text: 'Moderated community' },
-    { icon: Heart, text: 'Child-safe design' }
-  ];
-
   return (
     <div className="about-page">
-      {/* Hero Section */}
-      <section className="about-hero">
-        <div className="hero-icon">
-             <img src="/Codee Icon.png" alt="CODEE Logo" />
-        </div>
-
-        
-        <h1 className="hero-title">Welcome to CODEE</h1>
-        
-        <p className="hero-description">
-          Where coding becomes an adventure! Play the mobile game, level up your skills, 
-          and connect with a community of young innovators.
-        </p>
-
-        <div className="hero-buttons">
-          <button className="btn-primary">
-            <Download size={20} />
-            Download Mobile Game
-          </button>
-
-          <button className="btn-secondary">
-            Learn More
-            <ChevronRight size={20} />
-          </button>
-        </div>
-      </section>
-
-      {/* How It Works */}
-      <section className="how-it-works">
-        <div className="section-header">
-          <h2 className="section-title">How CODEE Works</h2>
-          <p className="section-subtitle">
-            Your journey from player to community member
-          </p>
-        </div>
-
-        <div className="features-grid">
-          {features.map((feature, index) => {
-            const Icon = feature.icon;
-            
-            return (
-              <div
-                key={index}
-                className="feature-card"
-                onMouseEnter={() => setActiveFeature(index)}
-                onMouseLeave={() => setActiveFeature(null)}
-              >
-                <div className="feature-icon">
-                  <Icon size={32} color="#000" />
-                </div>
-                
-                <h3 className="feature-title">{feature.title}</h3>
-                
-                <p className="feature-description">{feature.description}</p>
-                
-                <p className="feature-details">{feature.details}</p>
-              </div>
-            );
-          })}
-        </div>
-
-        {/* Journey Flow */}
-        <div className="journey-flow">
-          <h3 className="journey-title">Your CODEE Journey</h3>
-          
-          <div className="journey-steps">
-            <div className="journey-step">
-              <div className="journey-icon">📱</div>
-              <p className="journey-step-title">Download Game</p>
-              <p className="journey-step-desc">iOS or Android</p>
-            </div>
-
-            <div className="journey-arrow">→</div>
-
-            <div className="journey-step">
-              <div className="journey-icon">🎮</div>
-              <p className="journey-step-title">Choose Path</p>
-              <p className="journey-step-desc">HTML or Python</p>
-            </div>
-
-            <div className="journey-arrow">→</div>
-
-            <div className="journey-step">
-              <div className="journey-icon">⭐</div>
-              <p className="journey-step-title">Earn XP</p>
-              <p className="journey-step-desc">Complete quests</p>
-            </div>
-
-            <div className="journey-arrow">→</div>
-
-            <div className="journey-step">
-              <div className="journey-icon">🌐</div>
-              <p className="journey-step-title">Join Community</p>
-              <p className="journey-step-desc">Share & connect</p>
-            </div>
+      <div className="about-header">
+        <div className="about-header-content">
+          <div className="about-icon">
+            <img src="/Codee Icon.png" alt="Codee Logo" />
+          </div>
+          <div className="about-header-text">
+            <h1>About Codee</h1>
+            <p>Welcome to Your Coding Adventure</p>
           </div>
         </div>
-      </section>
+      </div>
 
-      {/* Learning Paths */}
-      <section className="learning-paths">
-        <div className="paths-container">
-          <div className="section-header">
-            <h2 className="section-title">Choose Your Path</h2>
-            <p className="section-subtitle">
-              Two exciting journeys, endless possibilities
+      <div className="about-content">
+        <section className="about-section">
+          <p className="intro-text">
+            Codee (Code With Me) is an interactive educational mobile game and community platform 
+            designed to make learning programming fun, engaging, and accessible for everyone—especially 
+            students, children, and beginners who dream of creating the future through code.
+          </p>
+        </section>
+
+        <section className="about-section">
+          <h2>What is Codee?</h2>
+          <p>
+            Codee transforms the sometimes intimidating world of programming into an exciting 8-bit 
+            adventure. Players embark on story-driven quests, solve coding challenges, and build real 
+            skills in HTML or Python while exploring a vibrant retro-pixel world. Whether you're 
+            interested in building websites or diving into AI and machine learning, Codee makes your 
+            first steps in programming feel like an epic adventure.
+          </p>
+        </section>
+
+        <section className="about-section">
+          <h2>Two Paths. One Journey. Endless Possibilities.</h2>
+          <p>Choose your adventure:</p>
+          <div className="learning-paths">
+            <div className="path-card">
+              <div className="path-icon">🌐</div>
+              <h3>Web Development Path</h3>
+              <p>
+                Master HTML and learn to build websites, structure content, create forms, and bring 
+                ideas to life on the internet
+              </p>
+            </div>
+            <div className="path-card">
+              <div className="path-icon">🤖</div>
+              <h3>AI / Machine Learning Path</h3>
+              <p>
+                Explore Python fundamentals, unlock the logic behind intelligent systems, and 
+                understand the technology shaping tomorrow
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section className="about-section">
+          <h2>Learning Through Play</h2>
+          <p>
+            Codee isn't just a game—it's a complete learning ecosystem built on the principle that 
+            the best way to learn is by doing, exploring, and having fun along the way.
+          </p>
+          
+          <h3>Game Features:</h3>
+          <ul className="feature-list">
+            <li>Story-driven levels with unique narratives for each learning path</li>
+            <li>Interactive coding challenges that teach real-world skills</li>
+            <li>Boss battles and special levels that unlock achievements</li>
+            <li>XP progression, ranks, and unlockable titles</li>
+            <li>Avatar customization to express your journey</li>
+            <li>Leaderboards to see how you stack up with fellow coders</li>
+          </ul>
+
+          <h3>Safe Community Features:</h3>
+          <ul className="feature-list">
+            <li>Anonymous profiles protecting your privacy</li>
+            <li>Moderated forums organized by topic (General, Achievements, Help, Python, HTML)</li>
+            <li>Share your progress, ask questions, and celebrate wins</li>
+            <li>Friend system to connect with other learners</li>
+            <li>Child-safe design with no private messaging or personal data exposure</li>
+          </ul>
+        </section>
+
+        <section className="about-section">
+          <h2>Why Codee Matters</h2>
+          <p>
+            Programming is the literacy of the future. Yet too many young minds are intimidated by 
+            complex syntax, boring tutorials, and the fear of making mistakes. Codee removes these 
+            barriers by:
+          </p>
+          <ul className="feature-list">
+            <li><strong>Making it safe to fail</strong> - In Codee, mistakes are part of the adventure</li>
+            <li><strong>Building confidence</strong> - Progress is visible, achievements are celebrated</li>
+            <li><strong>Creating community</strong> - You're never alone on your coding journey</li>
+            <li><strong>Keeping it fun</strong> - Retro gaming meets modern education</li>
+            <li><strong>Preparing for tomorrow</strong> - Build skills that open doors to hackathons, competitions, and tech careers</li>
+          </ul>
+        </section>
+
+        <section className="about-section">
+          <h2>Who is Codee For?</h2>
+          <div className="audience-grid">
+            <div className="audience-card">
+              <div className="audience-icon">🎓</div>
+              <p>Students exploring computer science and looking for a fun entry point into programming</p>
+            </div>
+            <div className="audience-card">
+              <div className="audience-icon">👶</div>
+              <p>Children (ages 8+) who love games and are curious about how technology works</p>
+            </div>
+            <div className="audience-card">
+              <div className="audience-icon">🌱</div>
+              <p>Beginners of any age taking their first steps into web development or AI/ML</p>
+            </div>
+            <div className="audience-card">
+              <div className="audience-icon">💡</div>
+              <p>Future innovators preparing to participate in hackathons, coding competitions, and the tech community</p>
+            </div>
+            <div className="audience-card">
+              <div className="audience-icon">✨</div>
+              <p>Anyone who believes learning should be an adventure, not a chore</p>
+            </div>
+          </div>
+        </section>
+
+        <section className="about-section codefest-section">
+          <h2>About CodeFest Network</h2>
+          <p>
+            Codee is proudly part of the <strong>CodeFest Network</strong>, a global movement dedicated 
+            to empowering the next generation of tech innovators through hands-on learning, community 
+            building, and competitive programming opportunities.
+          </p>
+
+          <h3>The CodeFest Mission</h3>
+          <p>
+            CodeFest Network exists to democratize tech education and create pathways for young minds 
+            to discover, develop, and deploy their potential in computer science and technology. Through 
+            hackathons, bootcamps, educational programs, and now Codee, we're building a world where 
+            every student has the opportunity to become a creator, problem-solver, and innovator.
+          </p>
+
+          <h3>From Bootcamp to Hackathon: Your Journey Continues</h3>
+          <p>Codee is your starting point, but the CodeFest Network offers much more:</p>
+          <p><strong>After Codee, you can:</strong></p>
+          <ul className="feature-list">
+            <li>Join CodeFest hackathons and work in teams to solve real-world challenges</li>
+            <li>Compete for prizes while building your portfolio</li>
+            <li>Connect with mentors and industry professionals</li>
+            <li>Participate in bootcamps that deepen your skills</li>
+            <li>Become part of a global community of young innovators</li>
+          </ul>
+          <p>
+            Whether you're just beginning your coding journey in Codee or you're ready to compete in 
+            your first hackathon, CodeFest Network provides the support, community, and opportunities 
+            you need to thrive.
+          </p>
+
+          <h3>Building the Future, Together</h3>
+          <p>At CodeFest Network, we believe that technology should be accessible to everyone. We're committed to:</p>
+          <ul className="feature-list">
+            <li>Creating safe, inclusive learning environments</li>
+            <li>Fostering creativity and innovation</li>
+            <li>Supporting students regardless of background or experience</li>
+            <li>Preparing the next generation for careers that don't yet exist</li>
+            <li>Making STEM education exciting, relevant, and achievable</li>
+          </ul>
+        </section>
+
+        <section className="about-section cta-section">
+          <h2>Join the Adventure</h2>
+          <p>
+            Ready to start your coding journey? Download Codee, choose your path, and discover what 
+            you're capable of creating. Your adventure begins now.
+          </p>
+          <p className="tagline"><strong>Play. Learn. Create. Connect.</strong></p>
+          
+          <div className="cta-buttons">
+            <a href="https://codefest.network/" target="_blank" rel="noopener noreferrer" className="cta-button">
+              Visit CodeFest Network
+            </a>
+          </div>
+
+          <div className="help-section">
+            <h3>Have Questions?</h3>
+            <p>
+              Visit our Help forum in the community section, where experienced players and moderators 
+              are ready to support your learning journey.
             </p>
           </div>
 
-          <div className="paths-grid">
-            {learningPaths.map((path, index) => {
-              const Icon = path.icon;
-              return (
-                <div key={index} className={`path-card ${path.type}`}>
-                  <div className="path-gradient"></div>
-
-                  <div className="path-icon">
-                    <Icon size={28} color="#000" />
-                  </div>
-
-                  <h3 className="path-name">{path.path}</h3>
-
-                  <div className="path-language">{path.language}</div>
-
-                  <div className="path-skills">
-                    {path.skills.map((skill, skillIndex) => (
-                      <div key={skillIndex} className="skill-item">
-                        <div className="skill-dot"></div>
-                        <span>{skill}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* Characters */}
-      <section className="characters-section">
-        <div className="section-header">
-          <h2 className="section-title">Meet Your Coding Heroes</h2>
-          <p className="section-subtitle">
-            Choose a character inspired by legendary programmers
+          <p className="closing-text">
+            <strong>Codee and CodeFest Network</strong> - Empowering tomorrow's innovators, one quest at a time.
           </p>
-        </div>
-
-        <div className="characters-grid">
-          {characters.map((character, index) => (
-            <div
-              key={index}
-              className="character-card"
-              onMouseEnter={(e) => {
-                e.currentTarget.style.borderColor = character.color;
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.borderColor = 'rgba(112, 234, 213, 0.2)';
-              }}
-            >
-              <div className="character-icon">
-                <img src={character.image} alt={`${character.name} profile`} />
-              </div>
-
-              
-              <h3 className="character-name">{character.name}</h3>
-              
-              <p className="character-title" style={{ color: character.color }}>
-                {character.title}
-              </p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Safety & Privacy */}
-      <section className="safety-section">
-        <div className="safety-container">
-          <div className="safety-icon">
-            <Shield size={40} color="#000" />
-          </div>
-
-          <h2 className="safety-title">Safety First</h2>
-
-          <p className="safety-description">
-            We've designed CODEE with children's safety as our top priority. 
-            All accounts are anonymous, and we never ask for personal information.
-          </p>
-
-          <div className="safety-grid">
-            {safetyFeatures.map((item, index) => {
-              const Icon = item.icon;
-              return (
-                <div key={index} className="safety-item">
-                  <Icon size={24} color="#70ead5" />
-                  <span className="safety-text">{item.text}</span>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="cta-section">
-        <h2 className="cta-title">Ready to Start Your Adventure?</h2>
-        
-        <p className="cta-description">
-          Download CODEE today and join thousands of young coders building the future
-        </p>
-
-        <button className="btn-download-large">
-          <Download size={24} />
-          Download CODEE Mobile
-        </button>
-
-        <div className="platform-text">Available on iOS and Android</div>
-      </section>
+        </section>
+      </div>
     </div>
   );
 }

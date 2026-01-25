@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import {
   Search, Bell, User, Home, BarChart3, Trophy, Hash,
-  MessageCircle, Heart, Share2, Bookmark, HelpCircle,
+  MessageCircle, Heart, Bookmark, HelpCircle,
   CheckCircle, Settings, LogOut, Moon, Sun
 } from 'lucide-react';
 import './App.css';
@@ -39,6 +39,7 @@ function App() {
   const [messageInput, setMessageInput] = useState('');
   const [viewingUser, setViewingUser] = useState(currentUser);
   const [showAbout, setShowAbout] = useState(false); 
+  const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
   const [settingsTab, setSettingsTab] = useState('account');
   const [userEmail, setUserEmail] = useState('ada@codee.com');
@@ -628,6 +629,17 @@ function App() {
             </div>
           </div>
           <div className="nav-right">
+            <button 
+              className="hamburger-btn"
+              onClick={() => setShowMobileMenu(!showMobileMenu)}
+            >
+              <div className={`hamburger-icon ${showMobileMenu ? 'open' : ''}`}>
+                <span></span>
+                <span></span>
+                <span></span>
+              </div>
+            </button>
+            
             <button className="icon-btn" onClick={() => {
               setShowChat(!showChat);
               setShowNotifications(false);
@@ -1009,8 +1021,23 @@ function App() {
       )}
 
       <div className="main-layout">
+        {/* Mobile menu overlay */}
+        {showMobileMenu && (
+          <div 
+            className="mobile-menu-overlay" 
+            onClick={() => setShowMobileMenu(false)}
+          ></div>
+        )}
+
+        {/* Mobile/Desktop sidebar */}
         {!showProfileView && !showAbout && !showSettings && (
-          <aside className="left-sidebar">
+          <aside className={`left-sidebar ${showMobileMenu ? 'mobile-open' : ''}`}>
+            <button 
+              className="close-mobile-menu"
+              onClick={() => setShowMobileMenu(false)}
+            >
+              ×
+            </button>
             <div className="sidebar-section">
               {sidebarItems.map(item => {
                 const Icon = item.icon;
@@ -1683,11 +1710,6 @@ function App() {
                                 <MessageCircle size={20} />
                                 <span>{getCommentCount(post.id, post.comments)}</span>
                               </button>
-
-                              <button className="action-btn">
-                                <Share2 size={20} />
-                              </button>
-
                               <button
                                 className={`action-btn bookmark ${savedPosts.includes(post.id) ? 'saved' : ''}`}
                                 onClick={() => toggleSave(post.id)}
