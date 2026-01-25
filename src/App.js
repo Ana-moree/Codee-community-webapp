@@ -43,7 +43,6 @@ function App() {
   const [showSettings, setShowSettings] = useState(false);
   const [settingsTab, setSettingsTab] = useState('account');
   const [userEmail, setUserEmail] = useState('ada@codee.com');
-  const [userPassword, setUserPassword] = useState('••••••••');
   const [userName, setUserName] = useState('riaree');
   const [editEmail, setEditEmail] = useState('');
   const [editPassword, setEditPassword] = useState('');
@@ -1247,10 +1246,13 @@ function App() {
                       <div className="settings-card-body">
                         <div className="settings-field-group-vertical">
                           <input
-                            type="password"
-                            className="settings-input"
-                            placeholder="Current password"
-                          />
+                          type="password"
+                          className="settings-input"
+                          placeholder="Current password"
+                          value={userPassword}
+                          readOnly
+                        />
+
                           <input
                             type="password"
                             className="settings-input"
@@ -1277,7 +1279,6 @@ function App() {
                             className="settings-save-btn-block"
                             onClick={() => {
                               if (validatePasswords() && editPassword) {
-                                setUserPassword('••••••••');
                                 setEditPassword('');
                                 setConfirmPassword('');
                                 setPasswordError('');
