@@ -356,3 +356,112 @@
     flex-direction: column;
   }
 }
+
+/* =========================
+   LIGHT MODE THEME (About Page)
+========================= */
+
+/* 1. Page Background & Base Text */
+.light-mode .about-page {
+  background: #f1f5f9; /* Match App background */
+  color: #334155;      /* Dark body text */
+}
+
+/* 2. Secondary Text (Descriptions, List items) */
+.light-mode .section-intro,
+.light-mode .intro-text,
+.light-mode .hero-description,
+.light-mode .about-header-text p,
+.light-mode .bento-card p,
+.light-mode .path-card p,
+.light-mode .audience-card p,
+.light-mode .feature-list li,
+.light-mode .bento-list li,
+.light-mode .closing-text {
+  color: #475569; /* Slate 600 - Readable gray */
+}
+
+/* 3. Headings - Brand Teal (Matching Home) */
+.light-mode .hero-title,
+.light-mode .about-header-text h1,
+.light-mode .about-section h2,
+.light-mode .bento-card h3,
+.light-mode .path-card h3,
+.light-mode .audience-card .audience-icon,
+.light-mode .help-section h3 {
+  color: #009688; /* Darker Teal for readability */
+  background: none;
+  -webkit-text-fill-color: initial;
+}
+
+/* 4. Cards - White with Gray Border & Shadow */
+.light-mode .bento-card,
+.light-mode .path-card,
+.light-mode .audience-card {
+  background: #ffffff;
+  border: 1px solid #cbd5e1; /* Clean gray border */
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+/* Card Hover States */
+.light-mode .bento-card:hover,
+.light-mode .path-card:hover,
+.light-mode .audience-card:hover {
+  background: #ffffff;
+  border-color: #94a3b8;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  transform: translateY(-4px);
+}
+
+/* 5. Header Backgrounds */
+.light-mode .about-header {
+  /* Light teal fade to gray */
+  background: linear-gradient(180deg, #ccfbf1 0%, #f1f5f9 100%);
+}
+
+.light-mode .about-hero {
+  background: linear-gradient(135deg, #e0f2fe 0%, #f1f5f9 100%);
+  border-bottom: 1px solid #cbd5e1;
+}
+
+/* 6. Special Sections (CodeFest & CTA) */
+.light-mode .codefest-section {
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+}
+
+.light-mode .cta-section {
+  /* Light gradient for CTA area */
+  background: linear-gradient(135deg, rgba(112, 234, 213, 0.1) 0%, #f1f5f9 100%);
+  border: 1px solid #cbd5e1;
+}
+
+.light-mode .help-section {
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  color: #334155;
+}
+
+/* 7. Highlights, Icons & Strong Text */
+.light-mode .bento-card strong,
+.light-mode .feature-list li strong,
+.light-mode .tagline {
+  color: #009688;
+}
+
+.light-mode .bento-list li::before,
+.light-mode .feature-list li::before {
+  color: #00D8B4; /* Brighter Teal for bullets */
+}
+
+/* 8. Buttons */
+.light-mode .cta-button {
+  background: #00D8B4;
+  color: #ffffff;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.light-mode .cta-button:hover {
+  background: #00c4a4;
+  opacity: 1;
+}

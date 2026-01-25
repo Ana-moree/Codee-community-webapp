@@ -461,8 +461,9 @@ body {
 ========================= */
 .main-layout {
   display: flex;
-  max-width: 2000px;
-  margin: 0 auto;
+  width: 100%;       
+  max-width: none;   
+  margin: 0;         
 }
 
 /* =========================
@@ -1551,9 +1552,9 @@ body {
   display: flex;
   align-items: center;
   gap: 8px;
-  background: #1a1a1a;
+  background: #009688;
   border: 1px solid rgba(112, 234, 213, 0.3);
-  color: #70ead5;
+  color: #ffffff;
   padding: 10px 20px;
   border-radius: 8px;
   font-size: 14px;
@@ -1571,8 +1572,9 @@ body {
   display: flex;
   justify-content: space-around;
   gap: 48px;
-  max-width: 1024px;
-  margin: 0 auto;
+  /* Removed max-width to allow it to stretch to the ends */
+  width: 100%; 
+  margin: 0;
   padding: 24px 32px;
   border-bottom: 1px solid rgba(14, 29, 26, 0.2);
 }
@@ -4213,4 +4215,549 @@ body {
   .audience-grid {
     grid-template-columns: 1fr;
   }
+}
+
+/* =========================
+   LIGHT MODE THEME (Revised: High Contrast & Clean)
+========================= */
+
+/* 1. Base Layout - Deeper Gray Background to make white cards pop */
+.app.light-mode {
+  background: #f1f5f9; /* Deeper slate gray background */
+  color: #0f172a;      /* Rich, deep black for primary text */
+}
+
+/* 2. Surfaces - Match App Background (Unified Light Gray) */
+.light-mode .top-nav,
+.light-mode .left-sidebar,
+.light-mode .right-sidebar,
+.light-mode .notifications-panel,
+.light-mode .chat-panel,
+.light-mode .profile-banner,
+.light-mode .community-header,
+.light-mode .tabs-container,
+.light-mode .leaderboard-header,
+.light-mode .settings-header,
+.light-mode .leaderboard-tabs-wrapper,
+.light-mode .settings-tabs-wrapper {
+  background: #f1f5f9;   /* Changed from #ffffff to match app background */
+  border-color: #e2e8f0; /* Keeps the border to separate sections */
+}
+
+/* 3. Cards - Defined borders and sharper shadows */
+.light-mode .post-card,
+.light-mode .settings-card,
+.light-mode .leaderboard-item,
+.light-mode .news-item,
+.light-mode .event-item,
+.light-mode .sidebar-footer,
+.light-mode .profile-card,
+.light-mode .comment-item,
+.light-mode .survey-card,
+.light-mode .path-card,
+.light-mode .audience-card {
+  background: #ffffff;
+  border: 1px solid #cbd5e1; /* Much clearer gray border */
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.06); /* Stronger, defined shadow */
+}
+
+.light-mode .post-card:hover,
+.light-mode .news-item:hover,
+.light-mode .event-item:hover,
+.light-mode .path-card:hover {
+  border-color: #94a3b8; /* Darker gray on hover */
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.06);
+}
+
+/* 4. Inputs - clearly defined against white backgrounds */
+.light-mode .post-composer,
+.light-mode .comment-input,
+.light-mode .search-input,
+.light-mode .settings-input,
+.light-mode .message-input,
+.light-mode .edit-bio-textarea {
+  background: #f8fafc;
+  border: 1px solid #cbd5e1; /* Sharper border */
+  color: #0f172a;
+}
+
+.light-mode .search-input:focus,
+.light-mode .comment-input:focus,
+.light-mode .settings-input:focus,
+.light-mode .message-input:focus,
+.light-mode .edit-bio-textarea:focus {
+  background: #ffffff;
+  border-color: #00D8B4;
+  box-shadow: 0 0 0 2px rgba(0, 216, 180, 0.2); /* Sharper focus ring */
+}
+
+.light-mode .logo-text {
+  color: #00D8B4;
+  text-shadow: 0 1px 1px rgba(0,0,0,0.1);
+}
+
+/* CHANGE: Make headings Teal instead of Black */
+.light-mode h1, .light-mode h2, .light-mode h3, 
+.light-mode .community-header h1,
+.light-mode .settings-header-text h1,
+.light-mode .leaderboard-header-text h1,
+.light-mode .profile-name-section h1,
+.light-mode .settings-card-header h3 {
+  color: #009688; /* Darker Teal for readability on light bg */
+}
+
+/* Keep body text dark gray for readability */
+.light-mode .post-text,
+.light-mode .comment-text,
+.light-mode .profile-bio,
+.light-mode .about-section p,
+.light-mode .intro-text {
+  color: #334155; 
+}
+
+/* Secondary text - significantly darker than before */
+.light-mode .post-time,
+.light-mode .comment-time,
+.light-mode .nav-link,
+.light-mode .sidebar-item,
+.light-mode .channel-item,
+.light-mode .tab,
+.light-mode .profile-tab,
+.light-mode .settings-tab,
+.light-mode .leaderboard-tab,
+.light-mode .settings-header-text p,
+.light-mode .community-header p,
+.light-mode .stat-label,
+.light-mode .profile-info p,
+.light-mode .news-content p,
+.light-mode .event-content p {
+  color: #475569; /* Slate 600 - good contrast for secondary info */
+}
+
+/* 6. Accents & Interactions - Clearer hover states */
+.light-mode .nav-link.active,
+.light-mode .tab.active,
+.light-mode .profile-tab.active,
+.light-mode .settings-tab.active,
+.light-mode .leaderboard-tab.active,
+.light-mode .post-username,
+.light-mode .comment-username,
+.light-mode .follower-username,
+.light-mode .chat-item-username {
+  color: #009688; /* Darker teal for better readability on white */
+  font-weight: 700;
+}
+
+.light-mode .nav-link:hover,
+.light-mode .tab:hover {
+  color: #00D8B4;
+}
+
+/* Stronger hover backgrounds */
+.light-mode .sidebar-item:hover,
+.light-mode .channel-item:hover,
+.light-mode .dropdown-item:hover,
+.light-mode .chat-list-item:hover,
+.light-mode .follower-item:hover,
+.light-mode .notification-item:hover {
+  background: #e2e8f0; /* Noticeable gray hover state */
+  color: #0f172a;
+}
+
+.light-mode .sidebar-item.active {
+  background: #ccfbf1; /* Very light teal background */
+  color: #0f766e;      /* Dark teal text */
+  border-color: transparent;
+}
+
+.light-mode .tab.active::after,
+.light-mode .profile-tab.active::after,
+.light-mode .settings-tab.active::after,
+.light-mode .leaderboard-tab.active::after {
+  background: #00D8B4;
+}
+
+/* 7. Buttons & Badges */
+.light-mode .post-btn,
+.light-mode .join-btn,
+.light-mode .settings-save-btn,
+.light-mode .send-message-btn,
+.light-mode .cta-button,
+.light-mode .save-btn {
+  background: #00D8B4;
+  color: #ffffff;
+  font-weight: 700;
+  border: none;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.light-mode .post-btn:hover,
+.light-mode .join-btn:hover,
+.light-mode .cta-button:hover {
+  background: #00c4a4;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+}
+
+.light-mode .action-btn,
+.light-mode .icon-btn,
+.light-mode .close-panel,
+.light-mode .back-btn {
+  color: #475569;
+  border-color: transparent;
+}
+
+.light-mode .action-btn:hover,
+.light-mode .icon-btn:hover,
+.light-mode .close-panel:hover,
+.light-mode .back-btn:hover {
+  background: #e2e8f0;
+  color: #0f172a;
+}
+
+.light-mode .post-title-badge,
+.light-mode .profile-title-badge,
+.light-mode .system-badge {
+  background: #e0f2fe;
+  color: #0369a1; /* Darker blue for contrast */
+  border: 1px solid #bae6fd;
+}
+
+/* 8. Modals & Dropdowns */
+.light-mode .profile-dropdown,
+.light-mode .edit-profile-modal,
+.light-mode .followers-modal {
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.light-mode .dropdown-item {
+  color: #334155;
+}
+
+.light-mode .edit-label,
+.light-mode .followers-modal-header h2 {
+  color: #0f172a;
+}
+
+.light-mode .cancel-btn {
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  color: #475569;
+}
+
+.light-mode .cancel-btn:hover {
+  background: #f1f5f9;
+  color: #0f172a;
+}
+
+/* =========================
+   9. Survey Card Fixes (Light Mode)
+========================= */
+
+/* Fix invisible/white text on white card */
+.light-mode .survey-question {
+  color: #0f172a;
+}
+
+.light-mode .survey-description {
+  color: #64748b;
+}
+
+
+.light-mode .survey-option {
+  background: #f1f5f9;       
+  border: 1px solid transparent; /* Hide the border */
+  color: #334155;
+}
+
+.light-mode .survey-option:hover:not(:disabled) {
+  background: #e2e8f0;     
+  border-color: transparent;
+}
+
+/* Keep border ONLY when selected */
+.light-mode .survey-option.selected {
+  background: #ccfbf1; 
+  color: #0f766e;      
+  border-color: #00D8B4; 
+}
+
+/* Fix stats footer */
+.light-mode .survey-stats {
+  border-top-color: #e2e8f0;
+  color: #64748b;
+}
+
+.light-mode .stat-item {
+  color: #64748b;
+}
+
+.light-mode .stat-item.clickable:hover {
+  color: #00D8B4;
+}
+
+/* "Submitted" state box */
+.light-mode .survey-submitted {
+  background: #f0fdfa; /* Very light mint */
+  border-color: #ccfbf1;
+  color: #009688;
+}
+
+.light-mode .system-badge {
+    background: #e0f2fe;
+    color: #0284c7;
+    border: 1px solid #bae6fd;
+}
+
+.light-mode .qotw-badge {
+    color: #0d9488; /* Darker teal for "Question of the week" text */
+    font-weight: 700;
+}
+
+/* =========================
+   10. Fix Double Border on Survey
+========================= */
+
+/* This removes the border, shadow, and background from the survey container
+   so it blends perfectly into the white post card */
+.light-mode .survey-card {
+  border: none;
+  box-shadow: none;
+  background: transparent;
+  padding: 0;
+}
+
+/* =========================
+   11. Fix Invisible Text (Inputs & Usernames)
+========================= */
+
+/* Fix: Text color when typing a new post */
+.light-mode .composer-input {
+  color: #0f172a; /* Dark text */
+}
+
+.light-mode .composer-input::placeholder {
+  color: #64748b; /* Visible gray placeholder */
+}
+
+/* Fix: Generic usernames (like in Leaderboards) appearing white */
+.light-mode .username {
+  color: #0f172a;
+}
+
+/* Fix: User handles (@name) appearing too light */
+.light-mode .user-handle {
+  color: #64748b;
+}
+
+/* =========================
+   12. Fix Channel Active Color
+========================= */
+
+.light-mode .channel-item.active {
+  background: #ccfbf1; /* Light teal background (matches sidebar active) */
+  color: #009688;      /* Teal text (matches Home/Leaderboard active) */
+  font-weight: 600;    /* Make text bold to indicate selection */
+}
+
+/* Ensure hover is distinct from active */
+.light-mode .channel-item:hover:not(.active) {
+  background: #e2e8f0;
+  color: #0f172a;
+}
+
+/* =========================
+   13. Fix Profile Tabs Background (Light Mode)
+========================= */
+
+.light-mode .profile-tabs-container {
+  background: #f1f5f9;  /* Match the app background color */
+  border-bottom: 1px solid #e2e8f0; /* Standard light gray border */
+}
+
+/* =========================
+   14. Fix Profile Stats Bar Layout
+========================= */
+
+/* Add spacing and alignment to the main stats container */
+.profile-stats-bar {
+  display: flex;
+  justify-content: space-evenly; /* Even spacing between items */
+  align-items: center;
+  padding: 24px 48px; /* Breathing room */
+  background: transparent; /* Let parent background show through */
+  margin-bottom: 0; /* Connects flush with tabs below */
+}
+
+/* Individual Stat Block Styling */
+.stat-item-inline {
+  display: flex;
+  align-items: center;
+  gap: 16px; /* Space between icon and text */
+}
+
+/* Icon Container - Optional circle background for polish */
+.stat-item-inline .stat-icon {
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(112, 234, 213, 0.1); /* Subtle teal background */
+  border-radius: 50%;
+}
+
+/* Light Mode Specific Overrides */
+.light-mode .profile-stats-bar {
+  border-bottom: 1px solid #e2e8f0; /* Clear separator line */
+  background: #ffffff; /* Solid white background for the bar */
+}
+
+.light-mode .stat-item-inline .stat-icon {
+  background: #f1f5f9; /* Light gray circle bg in light mode */
+}
+
+.light-mode .stat-value {
+  font-size: 24px; /* Larger number */
+  font-weight: 800;
+  color: #0f172a; /* Dark text */
+  line-height: 1;
+}
+
+.light-mode .stat-label {
+  font-size: 13px;
+  color: #64748b; /* Secondary gray text */
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 600;
+  margin-top: 4px;
+}
+
+/* =========================
+   15. Fix Layout Widths (Make backgrounds reach ends)
+========================= */
+
+/* 1. Force the main layout container to fill the screen width */
+.main-layout {
+  max-width: none !important;
+  width: 100%;
+  margin: 0;
+}
+
+/* 2. Make the Profile Stats Bar stretch full width */
+.profile-stats-bar {
+  max-width: none !important; /* Overrides the 1024px limit */
+  width: 100%;
+  margin: 0;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+/* 3. Center the *content* inside the stats bar, but keep background full width */
+.profile-stats-bar > * {
+  /* This ensures the items inside (XP, Rank, Badges) don't touch the edges */
+  margin: 0 20px; 
+}
+
+/* 4. Make Headers and Tabs stretch full width */
+.profile-header-content,
+.profile-tabs,
+.leaderboard-header-content,
+.leaderboard-tabs,
+.settings-header-content,
+.settings-tabs {
+  max-width: none !important;
+  width: 100%;
+  padding-left: 32px;
+  padding-right: 32px;
+}
+
+/* 5. Ensure the tab container background stretches */
+.profile-tabs-container,
+.leaderboard-tabs-wrapper,
+.settings-tabs-wrapper {
+  width: 100%;
+}
+
+/* =========================
+   16. Fix Notification & Chat Colors (Light Mode)
+========================= */
+
+/* Panel Headers */
+.light-mode .notifications-header h2,
+.light-mode .chat-header h2 {
+  color: #0f172a;
+}
+
+/* Notification Items */
+.light-mode .notification-title {
+  color: #0f172a;
+}
+
+.light-mode .notification-subtitle,
+.light-mode .notification-message {
+  color: #334155;
+}
+
+.light-mode .notification-time {
+  color: #64748b;
+}
+
+.light-mode .notification-item:hover {
+  background: #f1f5f9;
+}
+
+/* Chat List Items */
+.light-mode .chat-item-username {
+  color: #0f172a;
+}
+
+.light-mode .chat-item-preview {
+  color: #64748b;
+}
+
+.light-mode .chat-list-item:hover {
+  background: #f1f5f9;
+}
+
+/* Chat Conversation View */
+.light-mode .chat-username {
+  color: #0f172a;
+}
+
+.light-mode .chat-user-title {
+  color: #64748b;
+}
+
+/* Received Messages (Gray Bubble) */
+.light-mode .message-item.received .message-bubble {
+  background: #f1f5f9;
+  color: #0f172a;
+  border: 1px solid #e2e8f0;
+}
+
+/* Sent Messages (Teal Bubble - ensure text is black) */
+.light-mode .message-item.sent .message-bubble {
+  color: #000000;
+}
+
+/* Empty State Text */
+.light-mode .empty-chat p {
+  color: #64748b;
+}
+
+.light-mode .empty-chat-hint {
+  color: #94a3b8;
+}
+
+/* Chat Input Field */
+.light-mode .message-input {
+  background: #f8fafc;
+  border: 1px solid #cbd5e1;
+  color: #0f172a;
+}
+
+.light-mode .message-input::placeholder {
+  color: #64748b;
 }

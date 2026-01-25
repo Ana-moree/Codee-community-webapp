@@ -662,7 +662,7 @@ function App() {
                 M
               </button>
 
-              {showProfileMenu && (
+               {showProfileMenu && (
                 <div className="profile-dropdown">
                   <button className="dropdown-item" onClick={() => {
                     openUserProfile(currentUser);
@@ -1135,7 +1135,16 @@ function App() {
               <div className="settings-header">
                 <div className="settings-header-content">
                   <div className="settings-icon">
-                    <Settings size={32} />
+                    <img 
+                      src="/settings.png" 
+                      alt="Settings" 
+                      style={{ 
+                        width: '100%', 
+                        height: '100%', 
+                        objectFit: 'cover',
+                        borderRadius: '20px' // Matches the parent container's border radius
+                      }} 
+                    />
                   </div>
                   <div className="settings-header-text">
                     <h1>Settings</h1>
@@ -1444,7 +1453,7 @@ function App() {
                         setShowEditProfile(true);
                       }}
                     >
-                      <Settings size={18} />
+            
                       Edit profile
                     </button>
                   ) : (
@@ -1469,7 +1478,13 @@ function App() {
 
               <div className="profile-stats-bar">
                 <div className="stat-item-inline">
-                  <div className="stat-icon">⭐</div>
+                  <div className="stat-icon">
+                      <img 
+                        src="/star.png" 
+                        alt="XP" 
+                        style={{ width: '32px', height: '32px', objectFit: 'contain' }} 
+                      />
+                  </div>
                   <div>
                     <p className="stat-value">0</p>
                     <p className="stat-label">Total XP</p>
@@ -1856,7 +1871,13 @@ function App() {
 
               <div className="profile-stats">
                 <div className="stat">
-                  <div className="stat-icon">⭐</div>
+                  <div className="stat-icon">
+                      <img 
+                    src="/star.png" 
+                    alt="XP" 
+                    style={{ width: '24px', height: '24px', objectFit: 'contain' }} 
+                  />
+                  </div>
                   <div>
                     <p className="stat-label">Total XP</p>
                     <p className="stat-value">0</p>
