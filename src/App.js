@@ -43,12 +43,14 @@ function App() {
   const [showSettings, setShowSettings] = useState(false);
   const [settingsTab, setSettingsTab] = useState('account');
   const [userEmail, setUserEmail] = useState('ada@codee.com');
+  const [userPassword, setUserPassword] = useState('password123');
+  const [currentPasswordInput, setCurrentPasswordInput] = useState('');
+  const [passwordError, setPasswordError] = useState('');
   const [userName, setUserName] = useState('riaree');
   const [editEmail, setEditEmail] = useState('');
   const [editPassword, setEditPassword] = useState('');
   const [editUsername, setEditUsername] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [passwordError, setPasswordError] = useState('');
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [confirmationMessage, setConfirmationMessage] = useState('');
@@ -1245,13 +1247,15 @@ function App() {
                       </div>
                       <div className="settings-card-body">
                         <div className="settings-field-group-vertical">
+                          
                           <input
-                          type="password"
-                          className="settings-input"
-                          placeholder="Current password"
-                          value={userPassword}
-                          readOnly
-                        />
+                            type="password"
+                            className="settings-input"
+                            placeholder="Current password"
+                            value={currentPasswordInput}
+                            onChange={(e) => setCurrentPasswordInput(e.target.value)}
+                          />
+
 
                           <input
                             type="password"
@@ -1276,23 +1280,38 @@ function App() {
                             </div>
                           )}
                           <button
-                            className="settings-save-btn-block"
-                            onClick={() => {
-                              if (validatePasswords() && editPassword) {
+                              className="settings-save-btn-block"
+                              onClick={() => {
+                                // 1) Check current password
+                                if (currentPasswordInput !== userPassword) {
+                                  setPasswordError('Current password is incorrect');
+                                  return;
+                                }
+
+                                // 2) Check new password matches confirm
+                                if (!validatePasswords() || !editPassword) {
+                                  setPasswordError('Passwords do not match');
+                                  return;
+                                }
+
+                                // 3) Save new password
+                                setUserPassword(editPassword);
+
+                                // 4) Clear fields
+                                setCurrentPasswordInput('');
                                 setEditPassword('');
                                 setConfirmPassword('');
                                 setPasswordError('');
+
                                 setConfirmationMessage('Password updated successfully!');
                                 setShowConfirmation(true);
                                 setTimeout(() => setShowConfirmation(false), 3000);
-                              } else if (!validatePasswords()) {
-                                setPasswordError('Passwords do not match');
-                              }
-                            }}
-                            disabled={!editPassword || !confirmPassword}
-                          >
-                            Update Password
-                          </button>
+                              }}
+                              disabled={!currentPasswordInput || !editPassword || !confirmPassword}
+                            >
+                              Update Password
+                            </button>
+
                         </div>
                       </div>
                     </div>
